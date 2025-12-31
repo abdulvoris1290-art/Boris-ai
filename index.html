@@ -115,32 +115,34 @@
             border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            padding: 24px;
+            padding: 20px;
             z-index: 10;
+            height: 100vh;
+            overflow: hidden;
         }
 
         .logo {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 16px;
-            margin-bottom: 24px;
+            padding: 12px;
+            margin-bottom: 16px;
         }
 
         .logo-icon {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             background: var(--gradient);
-            border-radius: 16px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 22px;
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
         }
 
         .logo-text {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
             background: var(--gradient);
             -webkit-background-clip: text;
@@ -149,21 +151,21 @@
         }
 
         .new-chat-btn {
-            padding: 14px 20px;
+            padding: 12px 16px;
             background: var(--gradient);
             border: none;
-            border-radius: 14px;
+            border-radius: 12px;
             color: white;
             cursor: pointer;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-            margin-bottom: 24px;
+            margin-bottom: 16px;
         }
 
         .new-chat-btn:hover {
@@ -172,25 +174,99 @@
         }
 
         .menu-label {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--text-muted);
-            padding: 8px 16px;
+            padding: 8px 12px;
         }
 
-        .menu-item {
-            padding: 14px 16px;
-            border-radius: 12px;
+        .chat-history {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 12px;
+        }
+
+        .chat-history::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .chat-history::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        .chat-item {
+            padding: 10px 12px;
+            border-radius: 10px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin: 2px 0;
+            position: relative;
+        }
+
+        .chat-item:hover {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+        }
+
+        .chat-item.active {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .chat-item-icon {
+            font-size: 16px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .chat-item-text {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-item-delete {
+            opacity: 0;
+            padding: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chat-item:hover .chat-item-delete {
+            opacity: 0.7;
+        }
+
+        .chat-item-delete:hover {
+            opacity: 1 !important;
+            color: #ef4444;
+        }
+
+        .sidebar-footer {
+            border-top: 1px solid var(--border);
+            padding-top: 12px;
+        }
+
+        .menu-item {
+            padding: 10px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             transition: all 0.2s ease;
             color: var(--text-secondary);
             font-weight: 500;
-            margin: 4px 0;
+            font-size: 13px;
+            margin: 2px 0;
         }
 
         .menu-item:hover {
@@ -198,21 +274,60 @@
             color: var(--text-primary);
         }
 
-        .menu-item.active {
-            background: var(--gradient);
-            color: white;
-        }
-
         .menu-item span:first-child {
-            font-size: 20px;
-            width: 28px;
+            font-size: 16px;
+            width: 24px;
             text-align: center;
         }
 
-        .sidebar-footer {
-            margin-top: auto;
-            padding-top: 20px;
-            border-top: 1px solid var(--border);
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: var(--bg-card);
+            margin-top: 8px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .user-name {
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-email {
+            font-size: 10px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .main {
@@ -226,34 +341,49 @@
         }
 
         .top-bar {
-            padding: 16px 24px;
+            padding: 12px 20px;
             background: var(--bg-glass);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-shrink: 0;
         }
 
         .top-bar-left {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            width: 36px;
+            height: 36px;
+            background: var(--bg-glass);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 18px;
+            align-items: center;
+            justify-content: center;
         }
 
         .top-bar-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
         }
 
         .api-badge {
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 12px;
+            padding: 5px 12px;
+            border-radius: 16px;
+            font-size: 11px;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
 
         .api-badge.connected {
@@ -269,8 +399,8 @@
         }
 
         .api-badge .dot {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             background: currentColor;
         }
@@ -278,30 +408,30 @@
         .top-bar-right {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .model-select {
-            padding: 10px 16px;
+            padding: 8px 12px;
             background: var(--bg-glass);
             border: 1px solid var(--border);
-            border-radius: 10px;
+            border-radius: 8px;
             color: var(--text-primary);
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 500;
             cursor: pointer;
             outline: none;
         }
 
         .top-btn {
-            width: 42px;
-            height: 42px;
+            width: 36px;
+            height: 36px;
             background: var(--bg-glass);
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 10px;
             color: var(--text-secondary);
             cursor: pointer;
-            font-size: 18px;
+            font-size: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -317,8 +447,7 @@
         .messages {
             flex: 1;
             overflow-y: auto;
-            padding: 24px;
-            padding-bottom: 20px;
+            padding: 20px;
             scroll-behavior: smooth;
             min-height: 0;
         }
@@ -333,8 +462,8 @@
         }
 
         .welcome {
-            max-width: 800px;
-            margin: 40px auto;
+            max-width: 700px;
+            margin: 30px auto;
             text-align: center;
             animation: fadeIn 0.6s ease-out;
         }
@@ -345,76 +474,133 @@
         }
 
         .welcome-icon {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             background: var(--gradient);
-            border-radius: 30px;
+            border-radius: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 50px;
-            margin: 0 auto 24px;
+            font-size: 40px;
+            margin: 0 auto 20px;
             box-shadow: 0 10px 40px rgba(16, 185, 129, 0.4);
         }
 
         .welcome h1 {
-            font-size: 42px;
+            font-size: 32px;
             font-weight: 700;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             background: var(--gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .welcome-subtitle {
-            font-size: 18px;
+            font-size: 15px;
             color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .api-setup {
+            background: var(--bg-glass);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 450px;
+        }
+
+        .api-setup-title {
+            font-size: 14px;
+            font-weight: 600;
             margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .api-input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .api-input {
+            flex: 1;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: rgba(0,0,0,0.2);
+            color: white;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .api-input:focus {
+            border-color: var(--primary);
+        }
+
+        .api-save-btn {
+            padding: 10px 16px;
+            background: var(--gradient);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .api-link {
+            display: block;
+            margin-top: 10px;
+            font-size: 12px;
+            color: var(--primary);
+            text-decoration: none;
         }
 
         .cards {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            margin-top: 32px;
+            gap: 12px;
+            margin-top: 24px;
         }
 
         .card {
-            padding: 24px;
+            padding: 16px;
             background: var(--bg-glass);
             backdrop-filter: blur(10px);
             border: 1px solid var(--border);
-            border-radius: 20px;
+            border-radius: 14px;
             cursor: pointer;
             text-align: left;
             transition: all 0.3s ease;
         }
 
         .card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-3px);
             border-color: var(--primary);
-            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.2);
         }
 
         .card-icon {
-            font-size: 32px;
-            margin-bottom: 12px;
+            font-size: 24px;
+            margin-bottom: 8px;
         }
 
         .card h3 {
-            font-size: 16px;
+            font-size: 13px;
             font-weight: 600;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .card p {
-            font-size: 13px;
+            font-size: 11px;
             color: var(--text-muted);
         }
 
         .message {
-            max-width: 850px;
-            margin: 0 auto 20px;
+            max-width: 800px;
+            margin: 0 auto 16px;
             display: flex;
             animation: slideIn 0.3s ease-out;
         }
@@ -428,36 +614,70 @@
             justify-content: flex-end;
         }
 
-        .msg-bubble {
-            padding: 16px 20px;
-            border-radius: 20px;
+        .msg-wrapper {
             max-width: 75%;
-            line-height: 1.7;
-            font-size: 15px;
+        }
+
+        .msg-bubble {
+            padding: 12px 16px;
+            border-radius: 16px;
+            line-height: 1.6;
+            font-size: 14px;
         }
 
         .user-msg .msg-bubble {
             background: var(--gradient);
             color: white;
-            border-bottom-right-radius: 6px;
+            border-bottom-right-radius: 4px;
         }
 
         .ai-msg .msg-bubble {
             background: var(--bg-glass);
             backdrop-filter: blur(10px);
             border: 1px solid var(--border);
-            border-bottom-left-radius: 6px;
+            border-bottom-left-radius: 4px;
+        }
+
+        .msg-actions {
+            display: flex;
+            gap: 4px;
+            margin-top: 6px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .message:hover .msg-actions {
+            opacity: 1;
+        }
+
+        .msg-action-btn {
+            padding: 4px 8px;
+            background: var(--bg-glass);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+        }
+
+        .msg-action-btn:hover {
+            color: var(--text-primary);
+            border-color: var(--primary);
         }
 
         .typing-indicator {
             display: flex;
-            gap: 6px;
-            padding: 20px;
+            gap: 5px;
+            padding: 16px;
         }
 
         .typing-indicator span {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             background: var(--primary);
             border-radius: 50%;
             animation: typing 1.4s ease-in-out infinite;
@@ -468,11 +688,11 @@
 
         @keyframes typing {
             0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-10px); }
+            30% { transform: translateY(-8px); }
         }
 
         .input-area {
-            padding: 16px 24px 20px;
+            padding: 12px 20px 16px;
             background: var(--bg-glass);
             backdrop-filter: blur(20px);
             border-top: 1px solid var(--border);
@@ -480,17 +700,17 @@
         }
 
         .input-container {
-            max-width: 850px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
         .input-box {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 8px;
+            border-radius: 14px;
+            padding: 6px;
             transition: all 0.3s ease;
         }
 
@@ -501,15 +721,15 @@
 
         textarea {
             flex: 1;
-            padding: 12px 16px;
+            padding: 10px 14px;
             background: transparent;
             border: none;
             color: var(--text-primary);
-            font-size: 15px;
+            font-size: 14px;
             font-family: inherit;
             resize: none;
-            min-height: 24px;
-            max-height: 150px;
+            min-height: 20px;
+            max-height: 120px;
             outline: none;
         }
 
@@ -517,15 +737,22 @@
             color: var(--text-muted);
         }
 
+        .input-actions {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            padding-bottom: 2px;
+        }
+
         .send-btn {
-            width: 48px;
-            height: 48px;
+            width: 40px;
+            height: 40px;
             background: var(--gradient);
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             color: white;
             cursor: pointer;
-            font-size: 20px;
+            font-size: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -536,23 +763,30 @@
             transform: scale(1.05);
         }
 
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .input-hint {
             text-align: center;
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
             margin-top: 8px;
         }
 
         .notification {
             position: fixed;
-            top: 24px;
-            right: 24px;
-            padding: 16px 24px;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
             background: var(--bg-dark);
             border: 1px solid var(--border);
-            border-radius: 14px;
+            border-radius: 12px;
             z-index: 9999;
             animation: slideInRight 0.3s ease;
+            font-size: 13px;
         }
 
         @keyframes slideInRight {
@@ -562,22 +796,174 @@
 
         pre {
             background: rgba(0, 0, 0, 0.4);
-            padding: 16px;
-            border-radius: 12px;
+            padding: 14px;
+            border-radius: 10px;
             overflow-x: auto;
-            margin: 12px 0;
+            margin: 10px 0;
             border: 1px solid var(--border);
         }
 
         code {
-            font-family: 'Consolas', monospace;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            max-width: 400px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-content {
+            margin-bottom: 20px;
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--gradient);
+            border: none;
+            border-radius: 12px;
+            color: white;
             font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .modal-btn.secondary {
+            background: var(--bg-glass);
+            border: 1px solid var(--border);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Settings */
+        .settings-group {
+            margin-bottom: 16px;
+        }
+
+        .settings-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .settings-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toggle {
+            width: 44px;
+            height: 24px;
+            background: var(--bg-glass);
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .toggle.active {
+            background: var(--gradient);
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: all 0.3s;
+        }
+
+        .toggle.active::after {
+            left: 23px;
         }
 
         @media (max-width: 768px) {
-            .sidebar { display: none; }
-            .cards { grid-template-columns: 1fr; }
-            .welcome h1 { font-size: 32px; }
+            .sidebar {
+                position: fixed;
+                left: -300px;
+                top: 0;
+                height: 100vh;
+                z-index: 100;
+                transition: left 0.3s;
+            }
+            .sidebar.open {
+                left: 0;
+            }
+            .mobile-menu-btn {
+                display: flex;
+            }
+            .cards {
+                grid-template-columns: 1fr;
+            }
+            .welcome h1 {
+                font-size: 26px;
+            }
+            .msg-wrapper {
+                max-width: 85%;
+            }
         }
     </style>
 </head>
@@ -587,7 +973,7 @@
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
 
-    <div class="sidebar">
+    <div class="sidebar" id="sidebar">
         <div class="logo">
             <div class="logo-icon">🤖</div>
             <span class="logo-text">Boris AI</span>
@@ -598,34 +984,31 @@
             Yangi suhbat
         </button>
 
-        <div class="menu-section">
-            <div class="menu-label">Tez buyruqlar</div>
-            <div class="menu-item active" onclick="goHome()">
-                <span>🏠</span>
-                <span>Bosh sahifa</span>
-            </div>
-            <div class="menu-item" onclick="ask('Python dasturlash tilini o\'rgatib ber')">
-                <span>💻</span>
-                <span>Dasturlash</span>
-            </div>
-            <div class="menu-item" onclick="ask('Ingliz tilida suhbatlashaylik')">
-                <span>🌍</span>
-                <span>Til o'rganish</span>
-            </div>
-            <div class="menu-item" onclick="ask('Matematika masalasini yechishda yordam ber')">
-                <span>📐</span>
-                <span>Matematika</span>
-            </div>
-            <div class="menu-item" onclick="ask('Ijodiy hikoya yozib ber')">
-                <span>✍️</span>
-                <span>Ijodiy yozish</span>
-            </div>
+        <div class="menu-label">Suhbatlar tarixi</div>
+        <div class="chat-history" id="chatHistory">
+            <!-- Chat history items will be loaded here -->
         </div>
 
         <div class="sidebar-footer">
+            <div class="menu-item" onclick="openSettings()">
+                <span>⚙️</span>
+                <span>Sozlamalar</span>
+            </div>
+            <div class="menu-item" onclick="exportChats()">
+                <span>📤</span>
+                <span>Eksport</span>
+            </div>
             <div class="menu-item" onclick="showInfo()">
                 <span>ℹ️</span>
                 <span>Ma'lumot</span>
+            </div>
+
+            <div class="user-profile" id="userProfile" onclick="openAuthModal()">
+                <div class="user-avatar" id="userAvatar">👤</div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">Kirish</div>
+                    <div class="user-email" id="userEmail">Akkauntni ulang</div>
+                </div>
             </div>
         </div>
     </div>
@@ -633,10 +1016,11 @@
     <div class="main">
         <div class="top-bar">
             <div class="top-bar-left">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
                 <span class="top-bar-title">Boris AI Ultra</span>
-                <div class="api-badge connected" id="apiBadge">
+                <div class="api-badge disconnected" id="apiBadge">
                     <span class="dot"></span>
-                    <span>Groq AI</span>
+                    <span>API kerak</span>
                 </div>
             </div>
             <div class="top-bar-right">
@@ -644,8 +1028,10 @@
                     <option value="llama-3.3-70b-versatile">LLaMA 3.3 70B</option>
                     <option value="llama-3.1-8b-instant">LLaMA 3.1 8B (Tez)</option>
                     <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
+                    <option value="gemma2-9b-it">Gemma 2 9B</option>
                 </select>
-                <button class="top-btn" onclick="newChat()" title="Yangi suhbat">🔄</button>
+                <button class="top-btn" onclick="clearChat()" title="Tozalash">🗑️</button>
+                <button class="top-btn" onclick="toggleSidebar()" title="Menu">📋</button>
             </div>
         </div>
 
@@ -656,16 +1042,18 @@
                 <p class="welcome-subtitle">
                     Men Boris AI — Groq + LLaMA asosidagi tezkor AI yordamchiman
                 </p>
-                <p id="statusText" style="color: #f59e0b; font-size: 14px; margin-bottom: 30px;">
-                    ⚠️ API kalitni kiriting (pastda)
-                </p>
-                <div style="margin-bottom: 30px;">
-                    <input type="password" id="apiInput" placeholder="Groq API kalitingizni kiriting (gsk_...)"
-                        style="padding: 12px 16px; width: 80%; max-width: 400px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; font-size: 14px;">
-                    <button onclick="saveKey()" style="padding: 12px 20px; margin-left: 8px; background: var(--gradient); border: none; border-radius: 12px; color: white; cursor: pointer; font-weight: 600;">Saqlash</button>
-                    <p style="margin-top: 10px; font-size: 12px; color: var(--text-muted);">
-                        <a href="https://console.groq.com/keys" target="_blank" style="color: var(--primary);">👉 Bepul API kalit olish (console.groq.com)</a>
-                    </p>
+
+                <div class="api-setup" id="apiSetup">
+                    <div class="api-setup-title">
+                        <span>🔑</span> API kalitni sozlash
+                    </div>
+                    <div class="api-input-group">
+                        <input type="password" class="api-input" id="apiInput" placeholder="gsk_...">
+                        <button class="api-save-btn" onclick="saveKey()">Saqlash</button>
+                    </div>
+                    <a href="https://console.groq.com/keys" target="_blank" class="api-link">
+                        👉 Bepul API kalit olish (console.groq.com)
+                    </a>
                 </div>
 
                 <div class="cards">
@@ -674,19 +1062,16 @@
                         <h3>Kod yozish</h3>
                         <p>Har qanday tilda kod yozaman</p>
                     </div>
-
                     <div class="card" onclick="ask('Kvant fizikasini oddiy tilda tushuntir')">
                         <div class="card-icon">🧠</div>
                         <h3>Tushuntirish</h3>
                         <p>Murakkab narsalarni sodda qilaman</p>
                     </div>
-
-                    <div class="card" onclick="ask('Sun\'iy intellekt haqida esse yoz')">
+                    <div class="card" onclick="ask('Sun\\'iy intellekt haqida esse yoz')">
                         <div class="card-icon">✍️</div>
                         <h3>Yozish</h3>
                         <p>Esse, maqola, hikoya yozaman</p>
                     </div>
-
                     <div class="card" onclick="ask('Bu matnni inglizchaga tarjima qil: Salom dunyo')">
                         <div class="card-icon">🌍</div>
                         <h3>Tarjima</h3>
@@ -700,20 +1085,77 @@
             <div class="input-container">
                 <div class="input-box">
                     <textarea id="input" placeholder="Xabaringizni yozing..." onkeydown="checkEnter(event)" rows="1"></textarea>
-                    <button class="send-btn" onclick="send()">➤</button>
+                    <div class="input-actions">
+                        <button class="send-btn" onclick="send()" id="sendBtn">➤</button>
+                    </div>
                 </div>
                 <div class="input-hint">
-                    Enter — yuborish · Shift+Enter — yangi qator · Powered by Groq LLaMA
+                    Enter — yuborish · Shift+Enter — yangi qator · Powered by Groq
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Auth Modal -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal">
+            <div class="modal-title">👤 Akkauntga kirish</div>
+            <div class="modal-content">
+                <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">
+                    Chatlar tarixini saqlash va qurilmalar o'rtasida sinxronlash uchun kiring.
+                </p>
+            </div>
+            <button class="modal-btn" onclick="signInWithGoogle()">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#fff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                Google bilan kirish
+            </button>
+            <button class="modal-btn secondary" onclick="closeAuthModal()">
+                Bekor qilish
+            </button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal">
+            <div class="modal-title">⚙️ Sozlamalar</div>
+            <div class="modal-content">
+                <div class="settings-group">
+                    <div class="settings-label">Umumiy</div>
+                    <div class="settings-row">
+                        <span>Ovozli javoblar</span>
+                        <div class="toggle" id="voiceToggle" onclick="toggleSetting('voice')"></div>
+                    </div>
+                    <div class="settings-row">
+                        <span>Tarixni saqlash</span>
+                        <div class="toggle active" id="historyToggle" onclick="toggleSetting('history')"></div>
+                    </div>
+                    <div class="settings-row">
+                        <span>Kompakt rejim</span>
+                        <div class="toggle" id="compactToggle" onclick="toggleSetting('compact')"></div>
+                    </div>
+                </div>
+                <div class="settings-group">
+                    <div class="settings-label">API kalit</div>
+                    <div class="api-input-group">
+                        <input type="password" class="api-input" id="settingsApiInput" placeholder="gsk_...">
+                        <button class="api-save-btn" onclick="saveKeyFromSettings()">Saqlash</button>
+                    </div>
+                </div>
+            </div>
+            <button class="modal-btn secondary" onclick="closeSettings()">Yopish</button>
+        </div>
+    </div>
+
     <script>
-        // GROQ API - BEPUL VA TEZKOR!
-        const GROQ_API_KEY = localStorage.getItem('groq_key') || '';
+        // ===== CONFIGURATION =====
+        let GROQ_API_KEY = localStorage.getItem('groq_key') || '';
         let selectedModel = localStorage.getItem('boris_model') || 'llama-3.3-70b-versatile';
         let conversationHistory = [];
+        let currentChatId = null;
+        let allChats = JSON.parse(localStorage.getItem('boris_chats') || '[]');
+        let currentUser = JSON.parse(localStorage.getItem('boris_user') || 'null');
+        let settings = JSON.parse(localStorage.getItem('boris_settings') || '{"voice":false,"history":true,"compact":false}');
 
         const SYSTEM_PROMPT = `Sen Boris AI — zamonaviy va do'stona AI yordamchisan.
 
@@ -723,24 +1165,45 @@ Xususiyatlaring:
 - Javoblaringni aniq va foydali berasan
 - Emoji ishlatasan
 - Hurmatli munosabatda bo'lasan
+- Kod yozganda syntax highlighting uchun markdown code blocks ishlatasan
 
 Bugungi sana: ${new Date().toLocaleDateString('uz-UZ')}`;
 
+        // ===== INITIALIZATION =====
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('modelSelect').value = selectedModel;
 
+            // Auto-resize textarea
             const textarea = document.getElementById('input');
             textarea.addEventListener('input', function() {
                 this.style.height = 'auto';
-                this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
             });
+
+            // Load settings
+            loadSettings();
+
+            // Load user
+            if (currentUser) {
+                updateUserUI();
+            }
+
+            // Load chat history
+            renderChatHistory();
+
+            // Check API key
+            if (GROQ_API_KEY) {
+                document.getElementById('apiBadge').classList.remove('disconnected');
+                document.getElementById('apiBadge').classList.add('connected');
+                document.getElementById('apiBadge').querySelector('span:last-child').textContent = 'Groq AI';
+                document.getElementById('apiSetup').style.display = 'none';
+                document.getElementById('apiInput').value = '••••' + GROQ_API_KEY.slice(-4);
+            }
         });
 
+        // ===== API CALLS =====
         async function callGroqAPI(userMessage) {
-            conversationHistory.push({
-                role: 'user',
-                content: userMessage
-            });
+            conversationHistory.push({ role: 'user', content: userMessage });
 
             if (conversationHistory.length > 20) {
                 conversationHistory = conversationHistory.slice(-20);
@@ -766,55 +1229,57 @@ Bugungi sana: ${new Date().toLocaleDateString('uz-UZ')}`;
 
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({}));
-                    console.error('API xatosi:', response.status, errorData);
-
-                    if (response.status === 401) {
-                        return '❌ API kalit noto\'g\'ri! Iltimos to\'g\'ri kalitni kiriting.';
-                    }
-                    if (response.status === 429) {
-                        return '⏳ Juda ko\'p so\'rov! 1 daqiqa kuting...';
-                    }
-                    if (response.status === 400) {
-                        return '❌ So\'rov xatosi. Qayta urinib ko\'ring.';
-                    }
+                    if (response.status === 401) return '❌ API kalit noto\'g\'ri!';
+                    if (response.status === 429) return '⏳ Juda ko\'p so\'rov! Biroz kuting...';
                     return '❌ Xatolik: ' + (errorData.error?.message || response.status);
                 }
 
                 const data = await response.json();
                 const assistantMessage = data.choices[0].message.content;
+                conversationHistory.push({ role: 'assistant', content: assistantMessage });
 
-                conversationHistory.push({
-                    role: 'assistant',
-                    content: assistantMessage
-                });
+                // Save chat
+                if (settings.history) saveCurrentChat();
 
                 return assistantMessage;
 
             } catch (error) {
-                console.error('Groq API Error:', error);
-                return '❌ Xatolik yuz berdi. Qayta urinib ko\'ring.';
+                console.error('API Error:', error);
+                return '❌ Tarmoq xatosi. Internetni tekshiring.';
             }
         }
 
+        // ===== MESSAGING =====
         async function send() {
             const input = document.getElementById('input');
             const text = input.value.trim();
             if (!text) return;
 
-            // API kalit tekshiruvi
             if (!GROQ_API_KEY) {
                 notify('❌ Avval API kalitni kiriting!');
                 return;
             }
 
+            // Create new chat if needed
+            if (!currentChatId) {
+                currentChatId = Date.now().toString();
+                conversationHistory = [];
+            }
+
             addUserMsg(text);
             input.value = '';
             input.style.height = 'auto';
+
+            document.getElementById('sendBtn').disabled = true;
             showTyping();
 
             const response = await callGroqAPI(text);
+
             hideTyping();
+            document.getElementById('sendBtn').disabled = false;
             addAIMsg(response);
+
+            renderChatHistory();
         }
 
         function ask(question) {
@@ -826,22 +1291,267 @@ Bugungi sana: ${new Date().toLocaleDateString('uz-UZ')}`;
             document.getElementById('welcome').style.display = 'none';
             const div = document.createElement('div');
             div.className = 'message user-msg';
-            div.innerHTML = `<div class="msg-bubble">${escapeHtml(text)}</div>`;
+            div.innerHTML = `
+                <div class="msg-wrapper">
+                    <div class="msg-bubble">${escapeHtml(text)}</div>
+                    <div class="msg-actions">
+                        <button class="msg-action-btn" onclick="copyText(this)" data-text="${escapeHtml(text)}">📋 Nusxa</button>
+                    </div>
+                </div>
+            `;
             document.getElementById('messages').appendChild(div);
             scrollToBottom();
         }
 
-        function addAIMsg(text) {
+        function addAIMsg(text, showActions = true) {
             const div = document.createElement('div');
             div.className = 'message ai-msg';
-            div.innerHTML = `<div class="msg-bubble">${formatMarkdown(text)}</div>`;
+            const actionsHtml = showActions ? `
+                <div class="msg-actions">
+                    <button class="msg-action-btn" onclick="copyText(this)" data-text="${escapeHtml(text)}">📋 Nusxa</button>
+                    <button class="msg-action-btn" onclick="regenerate()">🔄 Qayta</button>
+                    <button class="msg-action-btn" onclick="speakText(this)" data-text="${escapeHtml(text)}">🔊 O'qish</button>
+                </div>
+            ` : '';
+            div.innerHTML = `
+                <div class="msg-wrapper">
+                    <div class="msg-bubble">${formatMarkdown(text)}</div>
+                    ${actionsHtml}
+                </div>
+            `;
             document.getElementById('messages').appendChild(div);
             scrollToBottom();
         }
 
+        async function regenerate() {
+            if (conversationHistory.length < 2) return;
+
+            // Remove last AI response
+            conversationHistory.pop();
+            const lastUserMsg = conversationHistory.pop();
+
+            // Remove last AI message from UI
+            const messages = document.querySelectorAll('.message.ai-msg');
+            if (messages.length > 0) {
+                messages[messages.length - 1].remove();
+            }
+
+            showTyping();
+            const response = await callGroqAPI(lastUserMsg.content);
+            hideTyping();
+            addAIMsg(response);
+        }
+
+        // ===== CHAT HISTORY =====
+        function saveCurrentChat() {
+            if (!currentChatId || conversationHistory.length === 0) return;
+
+            const firstMsg = conversationHistory.find(m => m.role === 'user')?.content || 'Yangi suhbat';
+            const title = firstMsg.slice(0, 30) + (firstMsg.length > 30 ? '...' : '');
+
+            const chatIndex = allChats.findIndex(c => c.id === currentChatId);
+            const chatData = {
+                id: currentChatId,
+                title: title,
+                messages: conversationHistory,
+                model: selectedModel,
+                updatedAt: Date.now()
+            };
+
+            if (chatIndex >= 0) {
+                allChats[chatIndex] = chatData;
+            } else {
+                allChats.unshift(chatData);
+            }
+
+            // Keep only last 50 chats
+            if (allChats.length > 50) {
+                allChats = allChats.slice(0, 50);
+            }
+
+            localStorage.setItem('boris_chats', JSON.stringify(allChats));
+        }
+
+        function renderChatHistory() {
+            const container = document.getElementById('chatHistory');
+            if (allChats.length === 0) {
+                container.innerHTML = '<div style="padding: 12px; font-size: 12px; color: var(--text-muted);">Hali suhbatlar yo\'q</div>';
+                return;
+            }
+
+            container.innerHTML = allChats.map(chat => `
+                <div class="chat-item ${chat.id === currentChatId ? 'active' : ''}" onclick="loadChat('${chat.id}')">
+                    <span class="chat-item-icon">💬</span>
+                    <span class="chat-item-text">${escapeHtml(chat.title)}</span>
+                    <span class="chat-item-delete" onclick="event.stopPropagation(); deleteChat('${chat.id}')">✕</span>
+                </div>
+            `).join('');
+        }
+
+        function loadChat(chatId) {
+            const chat = allChats.find(c => c.id === chatId);
+            if (!chat) return;
+
+            currentChatId = chatId;
+            conversationHistory = [...chat.messages];
+            selectedModel = chat.model || selectedModel;
+            document.getElementById('modelSelect').value = selectedModel;
+
+            // Clear and rebuild messages
+            document.getElementById('welcome').style.display = 'none';
+            const messagesContainer = document.getElementById('messages');
+            messagesContainer.querySelectorAll('.message').forEach(m => m.remove());
+
+            chat.messages.forEach(msg => {
+                if (msg.role === 'user') {
+                    addUserMsg(msg.content);
+                } else if (msg.role === 'assistant') {
+                    addAIMsg(msg.content, true);
+                }
+            });
+
+            renderChatHistory();
+            closeSidebar();
+        }
+
+        function deleteChat(chatId) {
+            allChats = allChats.filter(c => c.id !== chatId);
+            localStorage.setItem('boris_chats', JSON.stringify(allChats));
+
+            if (currentChatId === chatId) {
+                newChat();
+            }
+            renderChatHistory();
+            notify('🗑️ Suhbat o\'chirildi');
+        }
+
+        function newChat() {
+            currentChatId = null;
+            conversationHistory = [];
+            document.querySelectorAll('.message').forEach(m => m.remove());
+            document.getElementById('welcome').style.display = 'block';
+            renderChatHistory();
+            closeSidebar();
+        }
+
+        function clearChat() {
+            if (conversationHistory.length === 0) return;
+            if (confirm('Joriy suhbatni tozalashni xohlaysizmi?')) {
+                conversationHistory = [];
+                document.querySelectorAll('.message').forEach(m => m.remove());
+                document.getElementById('welcome').style.display = 'block';
+                if (currentChatId) {
+                    deleteChat(currentChatId);
+                }
+            }
+        }
+
+        // ===== EXPORT/IMPORT =====
+        function exportChats() {
+            const data = {
+                chats: allChats,
+                settings: settings,
+                exportedAt: new Date().toISOString()
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `boris-ai-backup-${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            notify('📤 Eksport qilindi!');
+        }
+
+        // ===== USER AUTH (Simulated) =====
+        function openAuthModal() {
+            if (currentUser) {
+                if (confirm('Akkauntdan chiqishni xohlaysizmi?')) {
+                    signOut();
+                }
+                return;
+            }
+            document.getElementById('authModal').classList.add('active');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+        }
+
+        function signInWithGoogle() {
+            // Simulated Google Sign-In (real implementation requires Firebase/OAuth)
+            const mockUser = {
+                name: 'Foydalanuvchi',
+                email: 'user@example.com',
+                avatar: null
+            };
+            currentUser = mockUser;
+            localStorage.setItem('boris_user', JSON.stringify(currentUser));
+            updateUserUI();
+            closeAuthModal();
+            notify('✅ Tizimga kirdingiz!');
+        }
+
+        function signOut() {
+            currentUser = null;
+            localStorage.removeItem('boris_user');
+            document.getElementById('userName').textContent = 'Kirish';
+            document.getElementById('userEmail').textContent = 'Akkauntni ulang';
+            document.getElementById('userAvatar').innerHTML = '👤';
+            notify('👋 Tizimdan chiqdingiz');
+        }
+
+        function updateUserUI() {
+            if (!currentUser) return;
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userEmail').textContent = currentUser.email;
+            if (currentUser.avatar) {
+                document.getElementById('userAvatar').innerHTML = `<img src="${currentUser.avatar}" alt="">`;
+            } else {
+                document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+            }
+        }
+
+        // ===== SETTINGS =====
+        function openSettings() {
+            document.getElementById('settingsModal').classList.add('active');
+            document.getElementById('settingsApiInput').value = GROQ_API_KEY ? '••••' + GROQ_API_KEY.slice(-4) : '';
+            loadSettings();
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('active');
+        }
+
+        function loadSettings() {
+            document.getElementById('voiceToggle').classList.toggle('active', settings.voice);
+            document.getElementById('historyToggle').classList.toggle('active', settings.history);
+            document.getElementById('compactToggle').classList.toggle('active', settings.compact);
+        }
+
+        function toggleSetting(key) {
+            settings[key] = !settings[key];
+            localStorage.setItem('boris_settings', JSON.stringify(settings));
+            loadSettings();
+            notify('✅ Sozlama saqlandi');
+        }
+
+        function saveKeyFromSettings() {
+            const key = document.getElementById('settingsApiInput').value.trim();
+            if (key && key.startsWith('gsk_')) {
+                localStorage.setItem('groq_key', key);
+                GROQ_API_KEY = key;
+                closeSettings();
+                location.reload();
+            } else if (key && !key.startsWith('••••')) {
+                notify('❌ Kalit gsk_ bilan boshlanishi kerak!');
+            }
+        }
+
+        // ===== UTILITIES =====
         function formatMarkdown(text) {
-            text = text.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
-            text = text.replace(/`([^`]+)`/g, '<code style="background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:6px;">$1</code>');
+            text = text.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code class="language-$1">$2</code></pre>');
+            text = text.replace(/`([^`]+)`/g, '<code style="background:rgba(16,185,129,0.2);padding:2px 6px;border-radius:4px;">$1</code>');
             text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
             text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
             text = text.replace(/\n/g, '<br>');
@@ -852,7 +1562,7 @@ Bugungi sana: ${new Date().toLocaleDateString('uz-UZ')}`;
             const div = document.createElement('div');
             div.id = 'typing';
             div.className = 'message ai-msg';
-            div.innerHTML = `<div class="msg-bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
+            div.innerHTML = `<div class="msg-wrapper"><div class="msg-bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div></div>`;
             document.getElementById('messages').appendChild(div);
             scrollToBottom();
         }
@@ -880,17 +1590,6 @@ Bugungi sana: ${new Date().toLocaleDateString('uz-UZ')}`;
             return div.innerHTML;
         }
 
-        function newChat() {
-            document.querySelectorAll('.message').forEach(m => m.remove());
-            document.getElementById('welcome').style.display = 'block';
-            conversationHistory = [];
-            notify('✨ Yangi suhbat boshlandi');
-        }
-
-        function goHome() {
-            newChat();
-        }
-
         function saveModel() {
             selectedModel = document.getElementById('modelSelect').value;
             localStorage.setItem('boris_model', selectedModel);
@@ -898,7 +1597,7 @@ Bugungi sana: ${new Date().toLocaleDateString('uz-UZ')}`;
         }
 
         function showInfo() {
-            notify('🚀 Boris AI - Groq LLaMA bilan ishlaydi. Kuniga 30,000 so\'rov bepul!');
+            notify('🚀 Boris AI Ultra - Groq LLaMA. Kuniga 30,000 so\'rov bepul!');
         }
 
         function notify(msg) {
@@ -916,24 +1615,51 @@ Bugungi sana: ${new Date().toLocaleDateString('uz-UZ')}`;
             const key = document.getElementById('apiInput').value.trim();
             if (key && key.startsWith('gsk_')) {
                 localStorage.setItem('groq_key', key);
+                GROQ_API_KEY = key;
                 location.reload();
             } else {
                 notify('❌ Kalit gsk_ bilan boshlanishi kerak!');
             }
         }
 
-        // Check API key on load
-        if (GROQ_API_KEY) {
-            document.getElementById('statusText').innerHTML = '✅ API kalit tayyor! Savollaringizni bering';
-            document.getElementById('statusText').style.color = '#10b981';
-            document.getElementById('apiInput').value = '••••••••' + GROQ_API_KEY.slice(-8);
-            document.getElementById('apiBadge').classList.remove('disconnected');
-            document.getElementById('apiBadge').classList.add('connected');
-        } else {
-            document.getElementById('apiBadge').classList.remove('connected');
-            document.getElementById('apiBadge').classList.add('disconnected');
-            document.getElementById('apiBadge').querySelector('span:last-child').textContent = 'API kerak';
+        function copyText(btn) {
+            const text = btn.dataset.text;
+            navigator.clipboard.writeText(text).then(() => {
+                notify('📋 Nusxalandi!');
+            });
         }
+
+        function speakText(btn) {
+            const text = btn.dataset.text;
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'uz-UZ';
+                speechSynthesis.speak(utterance);
+                notify('🔊 O\'qilmoqda...');
+            } else {
+                notify('❌ Brauzer ovozni qo\'llab-quvvatlamaydi');
+            }
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            const sidebar = document.getElementById('sidebar');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            if (window.innerWidth <= 768 &&
+                !sidebar.contains(e.target) &&
+                !menuBtn.contains(e.target) &&
+                sidebar.classList.contains('open')) {
+                closeSidebar();
+            }
+        });
     </script>
 </body>
 </html>
