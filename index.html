@@ -908,9 +908,9 @@
             </div>
             <div class="top-bar-right">
                 <select class="model-select" id="modelSelect" onchange="saveModel()">
-                    <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash</option>
-                    <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
-                    <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                    <option value="gemini-1.5-flash">Gemini 1.5 Flash (Tez)</option>
+                    <option value="gemini-1.5-pro">Gemini 1.5 Pro (Kuchli)</option>
+                    <option value="gemini-2.0-flash-exp">Gemini 2.0 (Yangi)</option>
                 </select>
                 <button class="top-btn" onclick="toggleTheme()" title="Mavzu">🎨</button>
                 <button class="top-btn" onclick="openApiModal()" title="API">🔑</button>
@@ -983,7 +983,7 @@
     <script>
         // ==================== CONFIGURATION ====================
         let API_KEY = localStorage.getItem('gemini_api_key') || '';
-        let selectedModel = localStorage.getItem('gemini_model') || 'gemini-2.0-flash-exp';
+        let selectedModel = localStorage.getItem('gemini_model') || 'gemini-1.5-flash';
         let conversationHistory = [];
 
         const SYSTEM_PROMPT = `Sen Boris AI — zamonaviy va do'stona AI yordamchisan.
@@ -1056,7 +1056,14 @@ Bugungi sana: ${new Date().toLocaleDateString('uz-UZ', { weekday: 'long', year: 
                     }
 
                     if (response.status === 429) {
-                        return '⏳ **So\'rovlar limiti tugadi!**\n\nBir daqiqa kuting va qayta urinib ko\'ring.';
+                        // Try with different model
+                        if (selectedModel === 'gemini-2.0-flash-exp') {
+                            selectedModel = 'gemini-1.5-flash';
+                            document.getElementById('modelSelect').value = selectedModel;
+                            localStorage.setItem('gemini_model', selectedModel);
+                            return '⚠️ Gemini 2.0 limiti tugadi. **Gemini 1.5 Flash** ga o\'tdim.\n\nIltimos, qayta yuboring!';
+                        }
+                        return '⏳ **So\'rovlar limiti tugadi!**\n\nBir daqiqa kuting va qayta urinib ko\'ring.\n\n💡 Yoki boshqa model tanlang.';
                     }
 
                     throw new Error(errorData.error?.message || `HTTP ${response.status}`);
