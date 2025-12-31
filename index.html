@@ -760,10 +760,19 @@ Bugungi sana: ${new Date().toLocaleDateString('uz-UZ')}`;
                 });
 
                 if (!response.ok) {
-                    if (response.status === 429) {
-                        return '⏳ Juda ko\'p so\'rov! 10 soniya kuting...';
+                    const errorData = await response.json().catch(() => ({}));
+                    console.error('API xatosi:', response.status, errorData);
+
+                    if (response.status === 401) {
+                        return '❌ API kalit noto\'g\'ri! Iltimos to\'g\'ri kalitni kiriting.';
                     }
-                    throw new Error(`Xatolik: ${response.status}`);
+                    if (response.status === 429) {
+                        return '⏳ Juda ko\'p so\'rov! 1 daqiqa kuting...';
+                    }
+                    if (response.status === 400) {
+                        return '❌ So\'rov xatosi. Qayta urinib ko\'ring.';
+                    }
+                    return '❌ Xatolik: ' + (errorData.error?.message || response.status);
                 }
 
                 const data = await response.json();
@@ -786,6 +795,12 @@ Bugungi sana: ${new Date().toLocaleDateString('uz-UZ')}`;
             const input = document.getElementById('input');
             const text = input.value.trim();
             if (!text) return;
+
+            // API kalit tekshiruvi
+            if (!GROQ_API_KEY) {
+                notify('❌ Avval API kalitni kiriting!');
+                return;
+            }
 
             addUserMsg(text);
             input.value = '';
@@ -904,10 +919,15 @@ Bugungi sana: ${new Date().toLocaleDateString('uz-UZ')}`;
 
         // Check API key on load
         if (GROQ_API_KEY) {
-            document.getElementById('statusText').innerHTML = '✅ Tayyor! Savollaringizni bering';
+            document.getElementById('statusText').innerHTML = '✅ API kalit tayyor! Savollaringizni bering';
             document.getElementById('statusText').style.color = '#10b981';
             document.getElementById('apiInput').value = '••••••••' + GROQ_API_KEY.slice(-8);
-            notify('🚀 Boris AI tayyor!');
+            document.getElementById('apiBadge').classList.remove('disconnected');
+            document.getElementById('apiBadge').classList.add('connected');
+        } else {
+            document.getElementById('apiBadge').classList.remove('connected');
+            document.getElementById('apiBadge').classList.add('disconnected');
+            document.getElementById('apiBadge').querySelector('span:last-child').textContent = 'API kerak';
         }
     </script>
 </body>
