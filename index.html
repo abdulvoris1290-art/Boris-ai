@@ -11,14 +11,9 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --primary: #10b981;
@@ -34,7 +29,6 @@
             --border: rgba(16, 185, 129, 0.2);
             --gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
             --danger: #ef4444;
-            --warning: #f59e0b;
         }
 
         body {
@@ -46,34 +40,14 @@
             overflow: hidden;
         }
 
-        /* Background Animation */
         .bg-animation {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: -1;
-            overflow: hidden;
-        }
-
-        .bg-animation::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
             background:
                 radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(52, 211, 153, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(110, 231, 183, 0.1) 0%, transparent 40%);
-            animation: bgMove 20s ease-in-out infinite;
-        }
-
-        @keyframes bgMove {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(2%, 2%) rotate(1deg); }
+                radial-gradient(circle at 80% 20%, rgba(52, 211, 153, 0.15) 0%, transparent 50%);
         }
 
         .orb {
@@ -84,27 +58,22 @@
             animation: float 15s ease-in-out infinite;
             pointer-events: none;
         }
-
         .orb-1 { width: 400px; height: 400px; background: var(--primary); top: -100px; right: -100px; }
         .orb-2 { width: 300px; height: 300px; background: var(--secondary); bottom: -50px; left: -50px; animation-delay: -5s; }
-        .orb-3 { width: 200px; height: 200px; background: var(--accent); top: 50%; left: 50%; animation-delay: -10s; }
 
         @keyframes float {
             0%, 100% { transform: translate(0, 0) scale(1); }
             50% { transform: translate(-20px, 20px) scale(0.95); }
         }
 
-        /* Sidebar */
         .sidebar {
             width: 280px;
             background: var(--bg-glass);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
             padding: 16px;
-            z-index: 10;
             height: 100vh;
         }
 
@@ -117,8 +86,7 @@
         }
 
         .logo-icon {
-            width: 44px;
-            height: 44px;
+            width: 44px; height: 44px;
             background: var(--gradient);
             border-radius: 14px;
             display: flex;
@@ -149,9 +117,8 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
             margin-bottom: 16px;
+            transition: all 0.3s;
         }
 
         .new-chat-btn:hover {
@@ -184,24 +151,20 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            transition: all 0.2s ease;
             color: var(--text-secondary);
             font-size: 13px;
             margin: 2px 0;
+            transition: all 0.2s;
         }
 
         .chat-item:hover { background: var(--bg-glass); color: var(--text-primary); }
         .chat-item.active { background: var(--gradient); color: white; }
-        .chat-item-icon { font-size: 16px; width: 24px; text-align: center; flex-shrink: 0; }
         .chat-item-text { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .chat-item-delete { opacity: 0; padding: 4px 8px; cursor: pointer; transition: all 0.2s; flex-shrink: 0; font-size: 12px; }
+        .chat-item-delete { opacity: 0; cursor: pointer; font-size: 12px; }
         .chat-item:hover .chat-item-delete { opacity: 0.7; }
-        .chat-item-delete:hover { opacity: 1 !important; color: var(--danger); }
+        .chat-item-delete:hover { color: var(--danger); }
 
-        .sidebar-footer {
-            border-top: 1px solid var(--border);
-            padding-top: 12px;
-        }
+        .sidebar-footer { border-top: 1px solid var(--border); padding-top: 12px; }
 
         .menu-item {
             padding: 10px 12px;
@@ -210,15 +173,13 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            transition: all 0.2s ease;
             color: var(--text-secondary);
-            font-weight: 500;
             font-size: 13px;
             margin: 2px 0;
+            transition: all 0.2s;
         }
 
         .menu-item:hover { background: var(--bg-glass); color: var(--text-primary); }
-        .menu-item-icon { font-size: 16px; width: 24px; text-align: center; }
 
         .user-profile {
             display: flex;
@@ -235,8 +196,7 @@
         .user-profile:hover { background: var(--bg-glass); }
 
         .user-avatar {
-            width: 36px;
-            height: 36px;
+            width: 36px; height: 36px;
             border-radius: 50%;
             background: var(--gradient);
             display: flex;
@@ -244,16 +204,13 @@
             justify-content: center;
             font-size: 14px;
             font-weight: 600;
-            flex-shrink: 0;
             overflow: hidden;
         }
 
         .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .user-info { flex: 1; overflow: hidden; }
-        .user-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .user-email { font-size: 10px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .user-name { font-size: 13px; font-weight: 600; }
+        .user-email { font-size: 10px; color: var(--text-muted); }
 
-        /* Main Content */
         .main {
             flex: 1;
             display: flex;
@@ -270,23 +227,19 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-shrink: 0;
         }
 
         .top-bar-left { display: flex; align-items: center; gap: 12px; }
 
         .mobile-menu-btn {
             display: none;
-            width: 36px;
-            height: 36px;
+            width: 36px; height: 36px;
             background: var(--bg-glass);
             border: 1px solid var(--border);
             border-radius: 10px;
             color: var(--text-secondary);
             cursor: pointer;
             font-size: 18px;
-            align-items: center;
-            justify-content: center;
         }
 
         .top-bar-title { font-size: 16px; font-weight: 600; }
@@ -301,9 +254,8 @@
             gap: 5px;
         }
 
-        .status-badge.online { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .status-badge.offline { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
-        .status-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+        .status-badge.online { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .status-badge.offline { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
 
         .top-bar-right { display: flex; align-items: center; gap: 6px; }
 
@@ -314,14 +266,11 @@
             border-radius: 8px;
             color: var(--text-primary);
             font-size: 12px;
-            font-weight: 500;
             cursor: pointer;
-            outline: none;
         }
 
         .top-btn {
-            width: 36px;
-            height: 36px;
+            width: 36px; height: 36px;
             background: var(--bg-glass);
             border: 1px solid var(--border);
             border-radius: 10px;
@@ -331,12 +280,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
         }
 
-        .top-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--primary); }
+        .top-btn:hover { border-color: var(--primary); color: var(--text-primary); }
 
-        /* Messages */
         .messages {
             flex: 1;
             overflow-y: auto;
@@ -344,24 +292,14 @@
             scroll-behavior: smooth;
         }
 
-        .messages::-webkit-scrollbar { width: 6px; }
-        .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
         .welcome {
             max-width: 700px;
             margin: 20px auto;
             text-align: center;
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .welcome-icon {
-            width: 80px;
-            height: 80px;
+            width: 80px; height: 80px;
             background: var(--gradient);
             border-radius: 24px;
             display: flex;
@@ -381,9 +319,8 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .welcome-subtitle { font-size: 15px; color: var(--text-secondary); margin-bottom: 20px; }
+        .welcome-subtitle { color: var(--text-secondary); margin-bottom: 20px; }
 
-        /* API Setup */
         .api-setup {
             background: var(--bg-glass);
             border: 1px solid var(--border);
@@ -394,15 +331,7 @@
             text-align: left;
         }
 
-        .api-setup-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
+        .api-setup-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
         .api-input-row { display: flex; gap: 8px; margin-bottom: 10px; }
 
         .api-input {
@@ -427,21 +356,10 @@
             cursor: pointer;
             font-weight: 600;
             font-size: 13px;
-            transition: all 0.2s;
         }
 
-        .btn-primary:hover { transform: scale(1.02); }
-        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .api-link { font-size: 12px; color: var(--primary); text-decoration: none; }
 
-        .api-link {
-            font-size: 12px;
-            color: var(--primary);
-            text-decoration: none;
-        }
-
-        .api-link:hover { text-decoration: underline; }
-
-        /* Quick Cards */
         .cards {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -456,20 +374,18 @@
             border-radius: 14px;
             cursor: pointer;
             text-align: left;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
 
         .card:hover {
             transform: translateY(-3px);
             border-color: var(--primary);
-            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.2);
         }
 
         .card-icon { font-size: 24px; margin-bottom: 8px; }
         .card h3 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
         .card p { font-size: 11px; color: var(--text-muted); }
 
-        /* Messages */
         .message {
             max-width: 800px;
             margin: 0 auto 16px;
@@ -490,7 +406,6 @@
             border-radius: 16px;
             line-height: 1.6;
             font-size: 14px;
-            word-wrap: break-word;
         }
 
         .user-msg .msg-bubble {
@@ -505,13 +420,19 @@
             border-bottom-left-radius: 4px;
         }
 
+        .msg-image {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+
         .msg-actions {
             display: flex;
             gap: 4px;
             margin-top: 6px;
             opacity: 0;
             transition: opacity 0.2s;
-            flex-wrap: wrap;
         }
 
         .message:hover .msg-actions { opacity: 1; }
@@ -524,17 +445,10 @@
             color: var(--text-muted);
             cursor: pointer;
             font-size: 11px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
             transition: all 0.2s;
         }
 
-        .msg-action-btn:hover {
-            color: var(--text-primary);
-            border-color: var(--primary);
-            background: var(--bg-card);
-        }
+        .msg-action-btn:hover { color: var(--text-primary); border-color: var(--primary); }
 
         .typing-indicator {
             display: flex;
@@ -543,8 +457,7 @@
         }
 
         .typing-indicator span {
-            width: 8px;
-            height: 8px;
+            width: 8px; height: 8px;
             background: var(--primary);
             border-radius: 50%;
             animation: typing 1.4s ease-in-out infinite;
@@ -558,16 +471,44 @@
             30% { transform: translateY(-8px); }
         }
 
-        /* Input Area */
         .input-area {
             padding: 12px 20px 16px;
             background: var(--bg-glass);
             backdrop-filter: blur(20px);
             border-top: 1px solid var(--border);
-            flex-shrink: 0;
         }
 
         .input-container { max-width: 800px; margin: 0 auto; }
+
+        .image-preview {
+            display: none;
+            margin-bottom: 10px;
+            position: relative;
+            width: fit-content;
+        }
+
+        .image-preview.active { display: block; }
+
+        .image-preview img {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 10px;
+            border: 2px solid var(--primary);
+        }
+
+        .image-preview-remove {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 24px;
+            height: 24px;
+            background: var(--danger);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
 
         .input-box {
             display: flex;
@@ -576,8 +517,8 @@
             border: 1px solid var(--border);
             border-radius: 14px;
             padding: 6px;
-            transition: all 0.3s ease;
             align-items: flex-end;
+            transition: all 0.3s;
         }
 
         .input-box:focus-within {
@@ -585,21 +526,16 @@
             box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
         }
 
-        .input-tools {
-            display: flex;
-            gap: 4px;
-            padding: 4px;
-        }
+        .input-tools { display: flex; gap: 4px; padding: 4px; }
 
         .tool-btn {
-            width: 32px;
-            height: 32px;
+            width: 36px; height: 36px;
             background: transparent;
             border: none;
             border-radius: 8px;
             color: var(--text-muted);
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -623,41 +559,28 @@
             outline: none;
         }
 
-        #messageInput::placeholder { color: var(--text-muted); }
-
         .send-btn {
-            width: 40px;
-            height: 40px;
+            width: 44px; height: 44px;
             background: var(--gradient);
             border: none;
             border-radius: 10px;
             color: white;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
+            transition: all 0.3s;
         }
 
         .send-btn:hover:not(:disabled) { transform: scale(1.05); }
         .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .input-hint {
-            text-align: center;
-            font-size: 10px;
-            color: var(--text-muted);
-            margin-top: 8px;
-        }
+        .input-hint { text-align: center; font-size: 10px; color: var(--text-muted); margin-top: 8px; }
 
-        /* Modals */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.7);
             display: flex;
             align-items: center;
@@ -675,10 +598,8 @@
             border: 1px solid var(--border);
             border-radius: 20px;
             padding: 24px;
-            max-width: 420px;
+            max-width: 400px;
             width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
             transform: scale(0.9);
             transition: transform 0.3s;
         }
@@ -692,31 +613,17 @@
             margin-bottom: 16px;
         }
 
-        .modal-title {
-            font-size: 18px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .modal-title { font-size: 18px; font-weight: 600; }
 
         .modal-close {
-            width: 32px;
-            height: 32px;
+            width: 32px; height: 32px;
             background: var(--bg-glass);
             border: none;
             border-radius: 8px;
             color: var(--text-muted);
             cursor: pointer;
             font-size: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
-
-        .modal-close:hover { color: var(--text-primary); }
-
-        .modal-body { margin-bottom: 20px; }
 
         .modal-btn {
             width: 100%;
@@ -734,15 +641,9 @@
             transition: all 0.2s;
         }
 
-        .modal-btn:hover { transform: scale(1.02); }
-        .modal-btn.primary { background: var(--gradient); color: white; }
         .modal-btn.google { background: #fff; color: #333; }
         .modal-btn.secondary { background: var(--bg-glass); color: var(--text-primary); border: 1px solid var(--border); }
-        .modal-btn.danger { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
-
-        /* Settings */
-        .settings-section { margin-bottom: 20px; }
-        .settings-section-title { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .modal-btn.danger { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
 
         .settings-item {
             display: flex;
@@ -752,38 +653,29 @@
             border-bottom: 1px solid var(--border);
         }
 
-        .settings-item:last-child { border-bottom: none; }
-        .settings-item-label { font-size: 14px; }
-        .settings-item-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-
         .toggle {
-            width: 44px;
-            height: 24px;
+            width: 44px; height: 24px;
             background: var(--bg-glass);
             border-radius: 12px;
             position: relative;
             cursor: pointer;
             transition: all 0.3s;
-            border: 1px solid var(--border);
         }
 
-        .toggle.active { background: var(--gradient); border-color: transparent; }
+        .toggle.active { background: var(--gradient); }
 
         .toggle::after {
             content: '';
             position: absolute;
-            width: 18px;
-            height: 18px;
+            width: 18px; height: 18px;
             background: white;
             border-radius: 50%;
-            top: 2px;
-            left: 2px;
+            top: 3px; left: 3px;
             transition: all 0.3s;
         }
 
-        .toggle.active::after { left: 22px; }
+        .toggle.active::after { left: 23px; }
 
-        /* Toast Notification */
         .toast {
             position: fixed;
             bottom: 100px;
@@ -791,45 +683,29 @@
             transform: translateX(-50%) translateY(100px);
             padding: 12px 24px;
             background: var(--bg-dark);
-            border: 1px solid var(--border);
+            border: 1px solid var(--primary);
             border-radius: 12px;
             font-size: 14px;
             z-index: 9999;
             opacity: 0;
             transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-        .toast.success { border-color: var(--primary); }
         .toast.error { border-color: var(--danger); }
 
-        /* Code blocks */
         pre {
             background: rgba(0, 0, 0, 0.4);
             padding: 14px;
             border-radius: 10px;
             overflow-x: auto;
             margin: 10px 0;
-            border: 1px solid var(--border);
         }
 
-        code { font-family: 'Consolas', 'Monaco', monospace; font-size: 13px; }
+        code { font-family: 'Consolas', monospace; font-size: 13px; }
 
-        .inline-code {
-            background: rgba(16, 185, 129, 0.2);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Consolas', monospace;
-            font-size: 13px;
-        }
-
-        /* Loading */
         .loading-spinner {
-            width: 20px;
-            height: 20px;
+            width: 20px; height: 20px;
             border: 2px solid transparent;
             border-top-color: currentColor;
             border-radius: 50%;
@@ -838,35 +714,11 @@
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Voice Recording */
-        .recording-indicator {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--danger);
-            font-size: 13px;
-        }
-
-        .recording-dot {
-            width: 10px;
-            height: 10px;
-            background: var(--danger);
-            border-radius: 50%;
-            animation: pulse 1s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-
-        /* Mobile */
         @media (max-width: 768px) {
             .sidebar {
                 position: fixed;
                 left: -300px;
                 top: 0;
-                height: 100vh;
                 z-index: 100;
                 transition: left 0.3s;
             }
@@ -874,10 +726,7 @@
             .sidebar-overlay {
                 display: none;
                 position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
+                top: 0; left: 0; right: 0; bottom: 0;
                 background: rgba(0,0,0,0.5);
                 z-index: 99;
             }
@@ -885,72 +734,33 @@
             .mobile-menu-btn { display: flex; }
             .cards { grid-template-columns: 1fr; }
             .welcome h1 { font-size: 26px; }
-            .msg-wrapper { max-width: 85%; }
             .input-tools { display: none; }
         }
-
-        /* File drop zone */
-        .drop-zone {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(16, 185, 129, 0.1);
-            border: 3px dashed var(--primary);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            font-size: 24px;
-            color: var(--primary);
-        }
-
-        .drop-zone.active { display: flex; }
     </style>
 </head>
 <body>
     <div class="bg-animation"></div>
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-    <div class="drop-zone" id="dropZone">📁 Faylni shu yerga tashlang</div>
 
-    <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="logo">
             <div class="logo-icon">🤖</div>
             <span class="logo-text">Boris AI</span>
         </div>
 
-        <button class="new-chat-btn" onclick="startNewChat()">
-            <span>✨</span> Yangi suhbat
-        </button>
+        <button class="new-chat-btn" onclick="startNewChat()">✨ Yangi suhbat</button>
 
         <div class="section-label">Suhbatlar tarixi</div>
         <div class="chat-history" id="chatHistory"></div>
 
         <div class="sidebar-footer">
-            <div class="menu-item" onclick="openModal('settingsModal')">
-                <span class="menu-item-icon">⚙️</span>
-                <span>Sozlamalar</span>
-            </div>
-            <div class="menu-item" onclick="openModal('shortcutsModal')">
-                <span class="menu-item-icon">⌨️</span>
-                <span>Klaviatura</span>
-            </div>
-            <div class="menu-item" onclick="exportAllChats()">
-                <span class="menu-item-icon">📤</span>
-                <span>Eksport</span>
-            </div>
-            <div class="menu-item" onclick="openModal('aboutModal')">
-                <span class="menu-item-icon">ℹ️</span>
-                <span>Haqida</span>
-            </div>
+            <div class="menu-item" onclick="openModal('settingsModal')">⚙️ Sozlamalar</div>
+            <div class="menu-item" onclick="exportAllChats()">📤 Eksport</div>
 
-            <div class="user-profile" id="userProfile" onclick="handleUserClick()">
+            <div class="user-profile" onclick="handleUserClick()">
                 <div class="user-avatar" id="userAvatar">👤</div>
-                <div class="user-info">
+                <div style="flex:1; overflow:hidden;">
                     <div class="user-name" id="userName">Kirish</div>
                     <div class="user-email" id="userEmail">Google bilan kirish</div>
                 </div>
@@ -959,14 +769,12 @@
     </div>
     <div class="sidebar-overlay" onclick="closeSidebar()"></div>
 
-    <!-- Main Content -->
     <div class="main">
         <div class="top-bar">
             <div class="top-bar-left">
                 <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
                 <span class="top-bar-title">Boris AI Ultra</span>
                 <div class="status-badge offline" id="statusBadge">
-                    <span class="status-dot"></span>
                     <span id="statusText">API kerak</span>
                 </div>
             </div>
@@ -974,11 +782,10 @@
                 <select class="model-select" id="modelSelect" onchange="changeModel()">
                     <option value="llama-3.3-70b-versatile">LLaMA 3.3 70B</option>
                     <option value="llama-3.1-8b-instant">LLaMA 3.1 8B (Tez)</option>
+                    <option value="llava-v1.5-7b-4096-preview">LLaVA 1.5 (Rasmli)</option>
                     <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
-                    <option value="gemma2-9b-it">Gemma 2 9B</option>
                 </select>
-                <button class="top-btn" onclick="clearCurrentChat()" title="Tozalash">🗑️</button>
-                <button class="top-btn" onclick="openModal('settingsModal')" title="Sozlamalar">⚙️</button>
+                <button class="top-btn" onclick="clearCurrentChat()">🗑️</button>
             </div>
         </div>
 
@@ -986,17 +793,15 @@
             <div class="welcome" id="welcomeScreen">
                 <div class="welcome-icon">🤖</div>
                 <h1>Assalomu alaykum!</h1>
-                <p class="welcome-subtitle">Men Boris AI — Groq + LLaMA asosidagi tezkor AI yordamchiman</p>
+                <p class="welcome-subtitle">Men Boris AI — Groq + LLaMA asosidagi tezkor AI yordamchiman.<br>🖼️ Rasm yuklang — uni tahlil qilaman!</p>
 
                 <div class="api-setup" id="apiSetup">
-                    <div class="api-setup-title">🔑 API kalitni sozlash</div>
+                    <div class="api-setup-title">🔑 API kalitni kiriting</div>
                     <div class="api-input-row">
                         <input type="password" class="api-input" id="apiKeyInput" placeholder="gsk_...">
                         <button class="btn-primary" onclick="saveApiKey()">Saqlash</button>
                     </div>
-                    <a href="https://console.groq.com/keys" target="_blank" class="api-link">
-                        👉 Bepul API kalit olish (console.groq.com)
-                    </a>
+                    <a href="https://console.groq.com/keys" target="_blank" class="api-link">👉 Bepul API kalit olish</a>
                 </div>
 
                 <div class="cards">
@@ -1010,15 +815,15 @@
                         <h3>Tushuntirish</h3>
                         <p>Murakkab narsalarni sodda qilaman</p>
                     </div>
-                    <div class="card" onclick="sendQuickPrompt('Suniy intellekt haqida qisqacha esse yoz')">
+                    <div class="card" onclick="document.getElementById('imageInput').click()">
+                        <div class="card-icon">🖼️</div>
+                        <h3>Rasm tahlili</h3>
+                        <p>Rasmni yuklang, tahlil qilaman</p>
+                    </div>
+                    <div class="card" onclick="sendQuickPrompt('Suniy intellekt haqida esse yoz')">
                         <div class="card-icon">✍️</div>
                         <h3>Yozish</h3>
                         <p>Esse, maqola, hikoya yozaman</p>
-                    </div>
-                    <div class="card" onclick="sendQuickPrompt('Salom dunyo - buni inglizcha, ruscha, yaponchaga tarjima qil')">
-                        <div class="card-icon">🌍</div>
-                        <h3>Tarjima</h3>
-                        <p>100+ tilga tarjima qilaman</p>
                     </div>
                 </div>
             </div>
@@ -1026,21 +831,25 @@
 
         <div class="input-area">
             <div class="input-container">
+                <div class="image-preview" id="imagePreview">
+                    <img id="previewImg" src="" alt="">
+                    <button class="image-preview-remove" onclick="removeImage()">✕</button>
+                </div>
+
                 <div class="input-box">
                     <div class="input-tools">
-                        <button class="tool-btn" onclick="triggerFileUpload()" title="Fayl yuklash">📎</button>
-                        <button class="tool-btn" id="micBtn" onclick="toggleVoiceRecording()" title="Ovozli xabar">🎤</button>
+                        <button class="tool-btn" onclick="document.getElementById('imageInput').click()" title="Rasm yuklash">🖼️</button>
+                        <button class="tool-btn" onclick="toggleVoice()" title="Ovozli xabar">🎤</button>
                     </div>
-                    <textarea id="messageInput" placeholder="Xabaringizni yozing..." rows="1"></textarea>
-                    <button class="send-btn" onclick="sendMessage()" id="sendBtn" title="Yuborish">➤</button>
+                    <textarea id="messageInput" placeholder="Xabaringizni yozing yoki rasm yuklang..." rows="1"></textarea>
+                    <button class="send-btn" onclick="sendMessage()" id="sendBtn">➤</button>
                 </div>
-                <div class="input-hint">Enter — yuborish · Shift+Enter — yangi qator · Ctrl+K — yangi chat</div>
+                <div class="input-hint">🖼️ Rasm tahlili — LLaVA model tanlang · Enter — yuborish</div>
             </div>
         </div>
     </div>
 
-    <!-- Hidden file input -->
-    <input type="file" id="fileInput" style="display:none" onchange="handleFileSelect(event)" accept=".txt,.md,.json,.csv,.js,.py,.html,.css">
+    <input type="file" id="imageInput" accept="image/*" style="display:none" onchange="handleImageSelect(event)">
 
     <!-- Auth Modal -->
     <div class="modal-overlay" id="authModal">
@@ -1049,12 +858,8 @@
                 <div class="modal-title">👤 Kirish</div>
                 <button class="modal-close" onclick="closeModal('authModal')">✕</button>
             </div>
-            <div class="modal-body">
-                <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 14px;">
-                    Chatlar tarixini saqlash va qurilmalar orasida sinxronlash uchun Google akkauntingiz bilan kiring.
-                </p>
-            </div>
-            <button class="modal-btn google" onclick="signInWithGoogle()" id="googleSignInBtn">
+            <p style="color: var(--text-secondary); margin-bottom: 16px;">Google akkauntingiz bilan kiring</p>
+            <button class="modal-btn google" onclick="signInWithGoogle()" id="googleBtn">
                 <svg width="18" height="18" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -1074,19 +879,11 @@
                 <div class="modal-title">👤 Profil</div>
                 <button class="modal-close" onclick="closeModal('profileModal')">✕</button>
             </div>
-            <div class="modal-body">
-                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
-                    <div class="user-avatar" id="profileAvatar" style="width: 60px; height: 60px; font-size: 24px;">👤</div>
-                    <div>
-                        <div style="font-size: 18px; font-weight: 600;" id="profileName">Foydalanuvchi</div>
-                        <div style="color: var(--text-muted);" id="profileEmail">email@example.com</div>
-                    </div>
-                </div>
-                <div class="settings-item">
-                    <div>
-                        <div class="settings-item-label">Jami suhbatlar</div>
-                    </div>
-                    <div id="profileChatCount">0</div>
+            <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px;">
+                <div class="user-avatar" id="profileAvatar" style="width:60px;height:60px;font-size:24px;">👤</div>
+                <div>
+                    <div style="font-size:18px;font-weight:600;" id="profileName">Foydalanuvchi</div>
+                    <div style="color:var(--text-muted);" id="profileEmail">email@example.com</div>
                 </div>
             </div>
             <button class="modal-btn danger" onclick="signOutUser()">🚪 Chiqish</button>
@@ -1101,134 +898,54 @@
                 <div class="modal-title">⚙️ Sozlamalar</div>
                 <button class="modal-close" onclick="closeModal('settingsModal')">✕</button>
             </div>
-            <div class="modal-body">
-                <div class="settings-section">
-                    <div class="settings-section-title">Umumiy</div>
-                    <div class="settings-item">
-                        <div>
-                            <div class="settings-item-label">Tarixni saqlash</div>
-                            <div class="settings-item-desc">Suhbatlarni brauzerda saqlash</div>
-                        </div>
-                        <div class="toggle active" id="toggleHistory" onclick="toggleSetting('saveHistory')"></div>
-                    </div>
-                    <div class="settings-item">
-                        <div>
-                            <div class="settings-item-label">Ovozli javob</div>
-                            <div class="settings-item-desc">AI javobini ovozli o'qish</div>
-                        </div>
-                        <div class="toggle" id="toggleVoice" onclick="toggleSetting('voiceResponse')"></div>
-                    </div>
-                    <div class="settings-item">
-                        <div>
-                            <div class="settings-item-label">Tovush effektlari</div>
-                            <div class="settings-item-desc">Xabar yuborishda tovush</div>
-                        </div>
-                        <div class="toggle" id="toggleSound" onclick="toggleSetting('soundEffects')"></div>
-                    </div>
-                </div>
-
-                <div class="settings-section">
-                    <div class="settings-section-title">API</div>
-                    <div class="api-input-row">
-                        <input type="password" class="api-input" id="settingsApiKey" placeholder="gsk_...">
-                        <button class="btn-primary" onclick="saveApiKeyFromSettings()">Saqlash</button>
-                    </div>
-                </div>
-
-                <div class="settings-section">
-                    <div class="settings-section-title">Ma'lumotlar</div>
-                    <button class="modal-btn secondary" onclick="exportAllChats()" style="margin-bottom: 8px;">📤 Eksport qilish</button>
-                    <button class="modal-btn danger" onclick="deleteAllChats()">🗑️ Barcha chatlarni o'chirish</button>
+            <div class="settings-item">
+                <span>Tarixni saqlash</span>
+                <div class="toggle active" id="toggleHistory" onclick="toggleSetting('saveHistory')"></div>
+            </div>
+            <div class="settings-item">
+                <span>Ovozli javob</span>
+                <div class="toggle" id="toggleVoice" onclick="toggleSetting('voiceResponse')"></div>
+            </div>
+            <div style="margin-top:16px;">
+                <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">API kalit</div>
+                <div class="api-input-row">
+                    <input type="password" class="api-input" id="settingsApiKey" placeholder="gsk_...">
+                    <button class="btn-primary" onclick="saveApiKeyFromSettings()">Saqlash</button>
                 </div>
             </div>
+            <button class="modal-btn danger" style="margin-top:16px;" onclick="deleteAllChats()">🗑️ Barcha chatlarni o'chirish</button>
         </div>
     </div>
 
-    <!-- Shortcuts Modal -->
-    <div class="modal-overlay" id="shortcutsModal">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title">⌨️ Klaviatura</div>
-                <button class="modal-close" onclick="closeModal('shortcutsModal')">✕</button>
-            </div>
-            <div class="modal-body">
-                <div class="settings-item">
-                    <div class="settings-item-label">Yangi chat</div>
-                    <div><code>Ctrl + K</code></div>
-                </div>
-                <div class="settings-item">
-                    <div class="settings-item-label">Yuborish</div>
-                    <div><code>Enter</code></div>
-                </div>
-                <div class="settings-item">
-                    <div class="settings-item-label">Yangi qator</div>
-                    <div><code>Shift + Enter</code></div>
-                </div>
-                <div class="settings-item">
-                    <div class="settings-item-label">Focusga o'tish</div>
-                    <div><code>/</code></div>
-                </div>
-                <div class="settings-item">
-                    <div class="settings-item-label">Esc</div>
-                    <div><code>Modalni yopish</code></div>
-                </div>
-            </div>
-            <button class="modal-btn secondary" onclick="closeModal('shortcutsModal')">Yopish</button>
-        </div>
-    </div>
-
-    <!-- About Modal -->
-    <div class="modal-overlay" id="aboutModal">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title">ℹ️ Haqida</div>
-                <button class="modal-close" onclick="closeModal('aboutModal')">✕</button>
-            </div>
-            <div class="modal-body" style="text-align: center;">
-                <div class="welcome-icon" style="margin: 0 auto 16px;">🤖</div>
-                <h2 style="margin-bottom: 8px;">Boris AI Ultra</h2>
-                <p style="color: var(--text-muted); margin-bottom: 16px;">Versiya 2.0</p>
-                <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;">
-                    Groq + LLaMA asosidagi tezkor AI yordamchi. Kuniga 30,000 ta bepul so'rov!
-                </p>
-                <div style="display: flex; gap: 8px; justify-content: center;">
-                    <a href="https://console.groq.com" target="_blank" class="modal-btn secondary" style="flex: 1;">Groq Console</a>
-                    <a href="https://github.com" target="_blank" class="modal-btn secondary" style="flex: 1;">GitHub</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast -->
     <div class="toast" id="toast"></div>
 
     <script>
-        // ================================
-        // FIREBASE CONFIGURATION
-        // ================================
+        // ================== FIREBASE - SIZNING CONFIG'INGIZ ==================
+        // Firebase Console'dan oling: https://console.firebase.google.com
+        // 1. Yangi loyiha yarating
+        // 2. Authentication > Sign-in method > Google > Enable
+        // 3. Project settings > Your apps > Web > Config'ni nusxalang
         const firebaseConfig = {
-            apiKey: "AIzaSyDQGR3K3gJKcBP0l6k4nG0uFhPFyP6NGEU",
-            authDomain: "boris-ai-ultra.firebaseapp.com",
-            projectId: "boris-ai-ultra",
-            storageBucket: "boris-ai-ultra.firebasestorage.app",
-            messagingSenderId: "847593625912",
-            appId: "1:847593625912:web:8fd8c6b2c3e5d9f4a1b2c3"
+            apiKey: "YOUR_API_KEY_HERE",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
 
-        // Initialize Firebase
-        let app, auth, db;
+        let auth = null;
         try {
-            app = firebase.initializeApp(firebaseConfig);
-            auth = firebase.auth();
-            db = firebase.firestore();
-            console.log('Firebase initialized successfully');
-        } catch (e) {
-            console.error('Firebase init error:', e);
+            if (firebaseConfig.apiKey !== "YOUR_API_KEY_HERE") {
+                firebase.initializeApp(firebaseConfig);
+                auth = firebase.auth();
+                auth.onAuthStateChanged(handleAuthChange);
+            }
+        } catch(e) {
+            console.log('Firebase config kerak');
         }
 
-        // ================================
-        // STATE
-        // ================================
+        // ================== STATE ==================
         const state = {
             apiKey: localStorage.getItem('groq_api_key') || '',
             model: localStorage.getItem('selected_model') || 'llama-3.3-70b-versatile',
@@ -1237,74 +954,38 @@
             allChats: JSON.parse(localStorage.getItem('all_chats') || '[]'),
             user: null,
             isLoading: false,
-            isRecording: false,
-            mediaRecorder: null,
-            settings: JSON.parse(localStorage.getItem('app_settings') || '{"saveHistory":true,"voiceResponse":false,"soundEffects":false}')
+            currentImage: null,
+            settings: JSON.parse(localStorage.getItem('app_settings') || '{"saveHistory":true,"voiceResponse":false}')
         };
 
-        const SYSTEM_PROMPT = `Sen Boris AI - professional va do'stona AI yordamchisan. O'zbek tilida javob berasan (agar boshqa til so'ralmasa). Emoji ishlatasan. Javoblaringni aniq va foydali qilasan. Kod yozganda markdown code blocks ishlatasan. Bugungi sana: ${new Date().toLocaleDateString('uz-UZ')}`;
+        const SYSTEM_PROMPT = `Sen Boris AI - professional AI yordamchisan. O'zbek tilida javob ber. Emoji ishlat. Agar rasm berilsa, uni batafsil tahlil qil.`;
 
-        // ================================
-        // INITIALIZATION
-        // ================================
-        document.addEventListener('DOMContentLoaded', initialize);
-
-        function initialize() {
-            // Setup UI
+        // ================== INIT ==================
+        document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('modelSelect').value = state.model;
             updateApiStatus();
             renderChatHistory();
             loadSettings();
 
-            // Setup textarea
             const input = document.getElementById('messageInput');
-            input.addEventListener('input', autoResizeInput);
-            input.addEventListener('keydown', handleInputKeydown);
+            input.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
 
-            // Keyboard shortcuts
-            document.addEventListener('keydown', handleGlobalKeydown);
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.key === 'k') { e.preventDefault(); startNewChat(); }
+                if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+            });
+        });
 
-            // Drag and drop
-            setupDragDrop();
-
-            // Auth listener
-            if (auth) {
-                auth.onAuthStateChanged(handleAuthChange);
-            }
-        }
-
-        function autoResizeInput() {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-        }
-
-        function handleInputKeydown(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        }
-
-        function handleGlobalKeydown(e) {
-            // Ctrl+K - New chat
-            if (e.ctrlKey && e.key === 'k') {
-                e.preventDefault();
-                startNewChat();
-            }
-            // / - Focus input
-            if (e.key === '/' && document.activeElement.tagName !== 'TEXTAREA' && document.activeElement.tagName !== 'INPUT') {
-                e.preventDefault();
-                document.getElementById('messageInput').focus();
-            }
-            // Escape - Close modals
-            if (e.key === 'Escape') {
-                document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
-            }
-        }
-
-        // ================================
-        // API STATUS
-        // ================================
+        // ================== API ==================
         function updateApiStatus() {
             const badge = document.getElementById('statusBadge');
             const text = document.getElementById('statusText');
@@ -1319,24 +1000,16 @@
                 badge.classList.remove('online');
                 badge.classList.add('offline');
                 text.textContent = 'API kerak';
-                if (setup) setup.style.display = 'block';
             }
         }
 
         function saveApiKey() {
             const key = document.getElementById('apiKeyInput').value.trim();
-            if (!key) {
-                showToast('API kalitni kiriting', 'error');
-                return;
-            }
-            if (!key.startsWith('gsk_')) {
-                showToast('Kalit gsk_ bilan boshlanishi kerak', 'error');
-                return;
-            }
+            if (!key.startsWith('gsk_')) { showToast('Kalit gsk_ bilan boshlanishi kerak', true); return; }
             state.apiKey = key;
             localStorage.setItem('groq_api_key', key);
             updateApiStatus();
-            showToast('API kalit saqlandi!', 'success');
+            showToast('API kalit saqlandi!');
         }
 
         function saveApiKeyFromSettings() {
@@ -1346,73 +1019,97 @@
                 localStorage.setItem('groq_api_key', key);
                 updateApiStatus();
                 closeModal('settingsModal');
-                showToast('API kalit saqlandi!', 'success');
+                showToast('API kalit saqlandi!');
             } else if (key) {
-                showToast('Kalit gsk_ bilan boshlanishi kerak', 'error');
+                showToast('Kalit gsk_ bilan boshlanishi kerak', true);
             }
         }
 
-        // ================================
-        // MESSAGING
-        // ================================
-        async function sendMessage() {
-            const input = document.getElementById('messageInput');
-            const text = input.value.trim();
+        // ================== IMAGE ==================
+        function handleImageSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
 
-            if (!text || state.isLoading) return;
-
-            if (!state.apiKey) {
-                showToast('Avval API kalitni kiriting!', 'error');
+            if (file.size > 20 * 1024 * 1024) {
+                showToast('Rasm juda katta (max 20MB)', true);
                 return;
             }
 
-            // New chat if needed
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                state.currentImage = e.target.result;
+                document.getElementById('previewImg').src = state.currentImage;
+                document.getElementById('imagePreview').classList.add('active');
+
+                // Auto-switch to vision model
+                state.model = 'llava-v1.5-7b-4096-preview';
+                document.getElementById('modelSelect').value = state.model;
+                localStorage.setItem('selected_model', state.model);
+                showToast('🖼️ Rasm yuklandi! LLaVA model tanlandi.');
+            };
+            reader.readAsDataURL(file);
+            event.target.value = '';
+        }
+
+        function removeImage() {
+            state.currentImage = null;
+            document.getElementById('imagePreview').classList.remove('active');
+            document.getElementById('previewImg').src = '';
+        }
+
+        // ================== MESSAGING ==================
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            let text = input.value.trim();
+
+            if (!text && !state.currentImage) return;
+            if (state.isLoading) return;
+            if (!state.apiKey) { showToast('Avval API kalitni kiriting!', true); return; }
+
             if (!state.currentChatId) {
                 state.currentChatId = 'chat_' + Date.now();
                 state.messages = [];
             }
 
-            // Clear input
+            if (!text && state.currentImage) text = 'Bu rasmni tahlil qil va batafsil tushuntir';
+
             input.value = '';
             input.style.height = 'auto';
-
-            // Hide welcome
             document.getElementById('welcomeScreen').style.display = 'none';
 
-            // Add user message
-            addMessageToUI('user', text);
-            state.messages.push({ role: 'user', content: text });
+            addMessageToUI('user', text, state.currentImage);
 
-            // Play sound
-            if (state.settings.soundEffects) playSound('send');
+            // Store for API
+            if (state.currentImage) {
+                state.messages.push({
+                    role: 'user',
+                    content: [
+                        { type: 'text', text: text },
+                        { type: 'image_url', image_url: { url: state.currentImage } }
+                    ]
+                });
+            } else {
+                state.messages.push({ role: 'user', content: text });
+            }
 
-            // Show loading
+            const hadImage = !!state.currentImage;
+            removeImage();
+
             state.isLoading = true;
             document.getElementById('sendBtn').disabled = true;
             showTypingIndicator();
 
-            // Call API
-            const response = await callAPI();
+            const response = await callAPI(hadImage);
 
-            // Hide loading
             hideTypingIndicator();
             state.isLoading = false;
             document.getElementById('sendBtn').disabled = false;
 
-            // Add AI response
             addMessageToUI('assistant', response);
             state.messages.push({ role: 'assistant', content: response });
 
-            // Voice response
-            if (state.settings.voiceResponse) {
-                speakText(response);
-            }
-
-            // Save
-            if (state.settings.saveHistory) {
-                saveCurrentChat();
-                renderChatHistory();
-            }
+            if (state.settings.voiceResponse) speakText(response);
+            if (state.settings.saveHistory) { saveCurrentChat(); renderChatHistory(); }
         }
 
         function sendQuickPrompt(text) {
@@ -1420,8 +1117,22 @@
             sendMessage();
         }
 
-        async function callAPI() {
+        async function callAPI(hasImage = false) {
             try {
+                let apiMessages = [{ role: 'system', content: SYSTEM_PROMPT }];
+
+                for (const msg of state.messages.slice(-10)) {
+                    if (msg.role === 'user') {
+                        if (Array.isArray(msg.content)) {
+                            apiMessages.push({ role: 'user', content: msg.content });
+                        } else {
+                            apiMessages.push({ role: 'user', content: msg.content });
+                        }
+                    } else {
+                        apiMessages.push({ role: 'assistant', content: msg.content });
+                    }
+                }
+
                 const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
                     method: 'POST',
                     headers: {
@@ -1430,10 +1141,7 @@
                     },
                     body: JSON.stringify({
                         model: state.model,
-                        messages: [
-                            { role: 'system', content: SYSTEM_PROMPT },
-                            ...state.messages.slice(-20)
-                        ],
+                        messages: apiMessages,
                         temperature: 0.7,
                         max_tokens: 4096
                     })
@@ -1443,6 +1151,9 @@
                     const err = await response.json().catch(() => ({}));
                     if (response.status === 401) return '❌ API kalit noto\'g\'ri!';
                     if (response.status === 429) return '⏳ So\'rovlar limiti. Biroz kuting...';
+                    if (response.status === 400 && hasImage) {
+                        return '❌ Rasm tahlili uchun LLaVA modelini tanlang. Model ro\'yxatidan "LLaVA 1.5 (Rasmli)" ni tanlang.';
+                    }
                     return '❌ Xatolik: ' + (err.error?.message || response.status);
                 }
 
@@ -1455,34 +1166,36 @@
             }
         }
 
-        function addMessageToUI(role, content) {
+        function addMessageToUI(role, content, imageUrl = null) {
             const container = document.getElementById('messagesContainer');
             const div = document.createElement('div');
             div.className = `message ${role === 'user' ? 'user-msg' : 'ai-msg'}`;
 
+            let imageHtml = imageUrl ? `<img src="${imageUrl}" class="msg-image" alt="Rasm">` : '';
             const formatted = role === 'assistant' ? formatMarkdown(content) : escapeHtml(content);
+
             const actions = role === 'assistant' ? `
                 <div class="msg-actions">
-                    <button class="msg-action-btn" onclick="copyMessageText(this)">📋 Nusxa</button>
-                    <button class="msg-action-btn" onclick="regenerateLastResponse()">🔄 Qayta</button>
-                    <button class="msg-action-btn" onclick="speakMessageText(this)">🔊 O'qish</button>
+                    <button class="msg-action-btn" onclick="copyText(this)">📋 Nusxa</button>
+                    <button class="msg-action-btn" onclick="regenerateResponse()">🔄 Qayta</button>
+                    <button class="msg-action-btn" onclick="speakText(this.closest('.msg-wrapper').dataset.content)">🔊 O'qish</button>
                 </div>
             ` : `
                 <div class="msg-actions">
-                    <button class="msg-action-btn" onclick="copyMessageText(this)">📋 Nusxa</button>
-                    <button class="msg-action-btn" onclick="editMessage(this)">✏️ Tahrir</button>
+                    <button class="msg-action-btn" onclick="copyText(this)">📋 Nusxa</button>
                 </div>
             `;
 
             div.innerHTML = `
-                <div class="msg-wrapper" data-content="${escapeHtml(content).replace(/"/g, '&quot;')}">
+                <div class="msg-wrapper" data-content="${escapeHtml(content)}">
+                    ${imageHtml}
                     <div class="msg-bubble">${formatted}</div>
                     ${actions}
                 </div>
             `;
 
             container.appendChild(div);
-            scrollToBottom();
+            container.scrollTop = container.scrollHeight;
         }
 
         function showTypingIndicator() {
@@ -1492,7 +1205,7 @@
             div.className = 'message ai-msg';
             div.innerHTML = '<div class="msg-wrapper"><div class="msg-bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div></div>';
             container.appendChild(div);
-            scrollToBottom();
+            container.scrollTop = container.scrollHeight;
         }
 
         function hideTypingIndicator() {
@@ -1500,117 +1213,68 @@
             if (el) el.remove();
         }
 
-        function scrollToBottom() {
-            const container = document.getElementById('messagesContainer');
-            setTimeout(() => container.scrollTop = container.scrollHeight, 50);
-        }
-
-        // ================================
-        // MESSAGE ACTIONS
-        // ================================
-        function copyMessageText(btn) {
-            const wrapper = btn.closest('.msg-wrapper');
-            const text = wrapper.dataset.content;
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('Nusxalandi!', 'success');
-            });
-        }
-
-        function speakMessageText(btn) {
-            const wrapper = btn.closest('.msg-wrapper');
-            const text = wrapper.dataset.content;
-            speakText(text);
-        }
-
-        function speakText(text) {
-            if (!('speechSynthesis' in window)) {
-                showToast('Brauzer ovozni qo\'llab-quvvatlamaydi', 'error');
-                return;
-            }
-            speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'uz-UZ';
-            utterance.rate = 0.9;
-            speechSynthesis.speak(utterance);
-            showToast('O\'qilmoqda...', 'success');
-        }
-
-        async function regenerateLastResponse() {
+        async function regenerateResponse() {
             if (state.messages.length < 2 || state.isLoading) return;
-
-            // Remove last response
             state.messages.pop();
+            const msgs = document.querySelectorAll('.message.ai-msg');
+            if (msgs.length > 0) msgs[msgs.length - 1].remove();
 
-            // Remove from UI
-            const messages = document.querySelectorAll('.message.ai-msg');
-            if (messages.length > 0) messages[messages.length - 1].remove();
-
-            // Regenerate
             state.isLoading = true;
             document.getElementById('sendBtn').disabled = true;
             showTypingIndicator();
-
             const response = await callAPI();
-
             hideTypingIndicator();
             state.isLoading = false;
             document.getElementById('sendBtn').disabled = false;
-
             addMessageToUI('assistant', response);
             state.messages.push({ role: 'assistant', content: response });
-
             if (state.settings.saveHistory) saveCurrentChat();
         }
 
-        function editMessage(btn) {
-            const wrapper = btn.closest('.msg-wrapper');
-            const text = wrapper.dataset.content;
-            document.getElementById('messageInput').value = text;
-            document.getElementById('messageInput').focus();
-            showToast('Xabar tahrir uchun nusxalandi', 'success');
-        }
-
-        // ================================
-        // CHAT HISTORY
-        // ================================
+        // ================== CHAT HISTORY ==================
         function saveCurrentChat() {
             if (!state.currentChatId || state.messages.length === 0) return;
 
-            const firstUserMsg = state.messages.find(m => m.role === 'user');
-            const title = firstUserMsg ? firstUserMsg.content.slice(0, 40) : 'Yangi suhbat';
+            const firstMsg = state.messages.find(m => m.role === 'user');
+            let title = 'Yangi suhbat';
+            if (firstMsg) {
+                if (Array.isArray(firstMsg.content)) {
+                    const textPart = firstMsg.content.find(c => c.type === 'text');
+                    title = textPart ? textPart.text.slice(0, 40) : '🖼️ Rasm';
+                } else {
+                    title = firstMsg.content.slice(0, 40);
+                }
+            }
 
             const chatData = {
                 id: state.currentChatId,
-                title: title + (title.length >= 40 ? '...' : ''),
-                messages: [...state.messages],
-                model: state.model,
+                title: title,
+                messages: state.messages.map(m => ({
+                    role: m.role,
+                    content: typeof m.content === 'string' ? m.content : '[Rasm bilan xabar]'
+                })),
                 updatedAt: Date.now()
             };
 
             const idx = state.allChats.findIndex(c => c.id === state.currentChatId);
-            if (idx >= 0) {
-                state.allChats[idx] = chatData;
-            } else {
-                state.allChats.unshift(chatData);
-            }
+            if (idx >= 0) state.allChats[idx] = chatData;
+            else state.allChats.unshift(chatData);
 
-            state.allChats = state.allChats.slice(0, 100);
+            state.allChats = state.allChats.slice(0, 50);
             localStorage.setItem('all_chats', JSON.stringify(state.allChats));
         }
 
         function renderChatHistory() {
             const container = document.getElementById('chatHistory');
-
             if (state.allChats.length === 0) {
-                container.innerHTML = '<div style="padding: 16px; text-align: center; color: var(--text-muted); font-size: 12px;">Hali suhbatlar yo\'q</div>';
+                container.innerHTML = '<div style="padding:16px;text-align:center;color:var(--text-muted);font-size:12px;">Hali suhbatlar yo\'q</div>';
                 return;
             }
-
             container.innerHTML = state.allChats.map(chat => `
                 <div class="chat-item ${chat.id === state.currentChatId ? 'active' : ''}" onclick="loadChat('${chat.id}')">
-                    <span class="chat-item-icon">💬</span>
+                    <span>💬</span>
                     <span class="chat-item-text">${escapeHtml(chat.title)}</span>
-                    <span class="chat-item-delete" onclick="event.stopPropagation(); deleteChat('${chat.id}')">✕</span>
+                    <span class="chat-item-delete" onclick="event.stopPropagation();deleteChat('${chat.id}')">✕</span>
                 </div>
             `).join('');
         }
@@ -1620,130 +1284,85 @@
             if (!chat) return;
 
             state.currentChatId = chatId;
-            state.messages = [...chat.messages];
-            state.model = chat.model || state.model;
-            document.getElementById('modelSelect').value = state.model;
+            state.messages = chat.messages.map(m => ({ role: m.role, content: m.content }));
 
-            // Clear and rebuild
             document.getElementById('welcomeScreen').style.display = 'none';
             const container = document.getElementById('messagesContainer');
             container.querySelectorAll('.message').forEach(m => m.remove());
-
-            chat.messages.forEach(msg => {
-                addMessageToUI(msg.role, msg.content);
-            });
-
+            chat.messages.forEach(msg => addMessageToUI(msg.role, msg.content));
             renderChatHistory();
             closeSidebar();
         }
 
         function deleteChat(chatId) {
-            if (!confirm('Bu suhbatni o\'chirishni xohlaysizmi?')) return;
-
             state.allChats = state.allChats.filter(c => c.id !== chatId);
             localStorage.setItem('all_chats', JSON.stringify(state.allChats));
-
-            if (state.currentChatId === chatId) {
-                startNewChat();
-            } else {
-                renderChatHistory();
-            }
-            showToast('Suhbat o\'chirildi', 'success');
+            if (state.currentChatId === chatId) startNewChat();
+            else renderChatHistory();
+            showToast('Suhbat o\'chirildi');
         }
 
         function startNewChat() {
             state.currentChatId = null;
             state.messages = [];
-
-            const container = document.getElementById('messagesContainer');
-            container.querySelectorAll('.message').forEach(m => m.remove());
+            removeImage();
+            document.querySelectorAll('.message').forEach(m => m.remove());
             document.getElementById('welcomeScreen').style.display = 'block';
-
             renderChatHistory();
             closeSidebar();
-            document.getElementById('messageInput').focus();
         }
 
         function clearCurrentChat() {
             if (state.messages.length === 0) return;
-            if (!confirm('Joriy suhbatni tozalashni xohlaysizmi?')) return;
-
-            if (state.currentChatId) {
-                state.allChats = state.allChats.filter(c => c.id !== state.currentChatId);
-                localStorage.setItem('all_chats', JSON.stringify(state.allChats));
-            }
-            startNewChat();
+            if (state.currentChatId) deleteChat(state.currentChatId);
+            else startNewChat();
         }
 
         function deleteAllChats() {
-            if (!confirm('BARCHA suhbatlarni o\'chirishni xohlaysizmi? Bu amalni qaytarib bo\'lmaydi!')) return;
-
+            if (!confirm('BARCHA suhbatlarni o\'chirishni xohlaysizmi?')) return;
             state.allChats = [];
             localStorage.removeItem('all_chats');
             startNewChat();
             closeModal('settingsModal');
-            showToast('Barcha suhbatlar o\'chirildi', 'success');
+            showToast('Barcha suhbatlar o\'chirildi');
         }
 
         function exportAllChats() {
-            if (state.allChats.length === 0) {
-                showToast('Eksport qilish uchun suhbatlar yo\'q', 'error');
-                return;
-            }
-
-            const data = {
-                chats: state.allChats,
-                settings: state.settings,
-                exportedAt: new Date().toISOString()
-            };
-
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
+            if (state.allChats.length === 0) { showToast('Eksport qilish uchun suhbatlar yo\'q', true); return; }
+            const blob = new Blob([JSON.stringify(state.allChats, null, 2)], { type: 'application/json' });
             const a = document.createElement('a');
-            a.href = url;
-            a.download = `boris-ai-export-${new Date().toISOString().split('T')[0]}.json`;
+            a.href = URL.createObjectURL(blob);
+            a.download = `boris-ai-export-${Date.now()}.json`;
             a.click();
-            URL.revokeObjectURL(url);
-            showToast('Eksport qilindi!', 'success');
+            showToast('Eksport qilindi!');
         }
 
-        // ================================
-        // AUTHENTICATION
-        // ================================
+        // ================== AUTH ==================
         function handleUserClick() {
             if (state.user) {
                 openModal('profileModal');
                 document.getElementById('profileName').textContent = state.user.displayName || 'Foydalanuvchi';
                 document.getElementById('profileEmail').textContent = state.user.email || '';
-                document.getElementById('profileChatCount').textContent = state.allChats.length;
-
                 const avatar = document.getElementById('profileAvatar');
-                if (state.user.photoURL) {
-                    avatar.innerHTML = `<img src="${state.user.photoURL}">`;
-                } else {
-                    avatar.textContent = (state.user.displayName || 'U').charAt(0);
-                }
+                if (state.user.photoURL) avatar.innerHTML = `<img src="${state.user.photoURL}">`;
+                else avatar.textContent = (state.user.displayName || 'U').charAt(0);
             } else {
                 openModal('authModal');
             }
         }
 
         async function signInWithGoogle() {
-            const btn = document.getElementById('googleSignInBtn');
+            const btn = document.getElementById('googleBtn');
             btn.innerHTML = '<div class="loading-spinner"></div> Kirish...';
             btn.disabled = true;
 
             try {
-                if (auth) {
-                    const provider = new firebase.auth.GoogleAuthProvider();
-                    await auth.signInWithPopup(provider);
-                } else {
-                    throw new Error('Firebase sozlanmagan');
-                }
+                if (!auth) throw new Error('Firebase sozlanmagan. Koddagi firebaseConfig ni to\'ldiring!');
+                const provider = new firebase.auth.GoogleAuthProvider();
+                await auth.signInWithPopup(provider);
             } catch (error) {
                 console.error('Sign in error:', error);
-                showToast('Kirishda xatolik: ' + error.message, 'error');
-
+                showToast('Xatolik: ' + error.message, true);
                 btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Google bilan kirish`;
                 btn.disabled = false;
             }
@@ -1751,28 +1370,17 @@
 
         function handleAuthChange(user) {
             state.user = user;
-            updateUserUI();
-
-            if (user) {
-                closeModal('authModal');
-                showToast(`Xush kelibsiz, ${user.displayName || 'Foydalanuvchi'}!`, 'success');
-            }
-        }
-
-        function updateUserUI() {
             const nameEl = document.getElementById('userName');
             const emailEl = document.getElementById('userEmail');
             const avatarEl = document.getElementById('userAvatar');
 
-            if (state.user) {
-                nameEl.textContent = state.user.displayName || 'Foydalanuvchi';
-                emailEl.textContent = state.user.email || '';
-
-                if (state.user.photoURL) {
-                    avatarEl.innerHTML = `<img src="${state.user.photoURL}">`;
-                } else {
-                    avatarEl.textContent = (state.user.displayName || 'U').charAt(0);
-                }
+            if (user) {
+                nameEl.textContent = user.displayName || 'Foydalanuvchi';
+                emailEl.textContent = user.email || '';
+                if (user.photoURL) avatarEl.innerHTML = `<img src="${user.photoURL}">`;
+                else avatarEl.textContent = (user.displayName || 'U').charAt(0);
+                closeModal('authModal');
+                showToast(`Xush kelibsiz, ${user.displayName || 'Foydalanuvchi'}!`);
             } else {
                 nameEl.textContent = 'Kirish';
                 emailEl.textContent = 'Google bilan kirish';
@@ -1784,141 +1392,46 @@
             try {
                 if (auth) await auth.signOut();
                 state.user = null;
-                updateUserUI();
+                handleAuthChange(null);
                 closeModal('profileModal');
-                showToast('Tizimdan chiqdingiz', 'success');
-            } catch (error) {
-                showToast('Chiqishda xatolik', 'error');
-            }
+                showToast('Tizimdan chiqdingiz');
+            } catch (e) { showToast('Xatolik', true); }
         }
 
-        // ================================
-        // SETTINGS
-        // ================================
+        // ================== SETTINGS ==================
         function loadSettings() {
             document.getElementById('toggleHistory').classList.toggle('active', state.settings.saveHistory);
             document.getElementById('toggleVoice').classList.toggle('active', state.settings.voiceResponse);
-            document.getElementById('toggleSound').classList.toggle('active', state.settings.soundEffects);
-
-            if (state.apiKey) {
-                document.getElementById('settingsApiKey').value = '••••••••' + state.apiKey.slice(-4);
-            }
+            if (state.apiKey) document.getElementById('settingsApiKey').value = '••••' + state.apiKey.slice(-4);
         }
 
         function toggleSetting(key) {
             state.settings[key] = !state.settings[key];
             localStorage.setItem('app_settings', JSON.stringify(state.settings));
             loadSettings();
-            showToast('Sozlama saqlandi', 'success');
+            showToast('Saqlandi');
         }
 
         function changeModel() {
             state.model = document.getElementById('modelSelect').value;
             localStorage.setItem('selected_model', state.model);
-            showToast('Model: ' + state.model.split('-')[0], 'success');
+            showToast('Model: ' + state.model.split('-')[0]);
         }
 
-        // ================================
-        // FILE HANDLING
-        // ================================
-        function triggerFileUpload() {
-            document.getElementById('fileInput').click();
+        // ================== UTILS ==================
+        function toggleVoice() { showToast('Ovozli xabar tez orada...'); }
+
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) return;
+            speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'uz-UZ';
+            speechSynthesis.speak(utterance);
         }
 
-        function handleFileSelect(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            if (file.size > 100000) {
-                showToast('Fayl juda katta (max 100KB)', 'error');
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const content = e.target.result;
-                const preview = content.slice(0, 500) + (content.length > 500 ? '...' : '');
-                document.getElementById('messageInput').value = `Fayl: ${file.name}\n\n\`\`\`\n${preview}\n\`\`\`\n\nBu fayl haqida nima deysan?`;
-                document.getElementById('messageInput').focus();
-                showToast('Fayl yuklandi', 'success');
-            };
-            reader.readAsText(file);
-            event.target.value = '';
-        }
-
-        function setupDragDrop() {
-            const dropZone = document.getElementById('dropZone');
-
-            document.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropZone.classList.add('active');
-            });
-
-            document.addEventListener('dragleave', (e) => {
-                if (e.relatedTarget === null) {
-                    dropZone.classList.remove('active');
-                }
-            });
-
-            document.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropZone.classList.remove('active');
-
-                const file = e.dataTransfer.files[0];
-                if (file) {
-                    const input = document.getElementById('fileInput');
-                    const dt = new DataTransfer();
-                    dt.items.add(file);
-                    input.files = dt.files;
-                    handleFileSelect({ target: input });
-                }
-            });
-        }
-
-        // ================================
-        // VOICE RECORDING
-        // ================================
-        async function toggleVoiceRecording() {
-            const btn = document.getElementById('micBtn');
-
-            if (state.isRecording) {
-                // Stop recording
-                state.mediaRecorder.stop();
-                state.isRecording = false;
-                btn.classList.remove('active');
-                btn.innerHTML = '🎤';
-            } else {
-                // Start recording
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    state.mediaRecorder = new MediaRecorder(stream);
-                    const chunks = [];
-
-                    state.mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
-                    state.mediaRecorder.onstop = () => {
-                        stream.getTracks().forEach(t => t.stop());
-                        // Here you would send to speech-to-text API
-                        showToast('Ovozli xabar tayyor (STT kerak)', 'success');
-                    };
-
-                    state.mediaRecorder.start();
-                    state.isRecording = true;
-                    btn.classList.add('active');
-                    btn.innerHTML = '⏹️';
-                    showToast('Yozib olinmoqda...', 'success');
-
-                } catch (error) {
-                    showToast('Mikrofonga ruxsat berilmadi', 'error');
-                }
-            }
-        }
-
-        // ================================
-        // UTILITIES
-        // ================================
         function formatMarkdown(text) {
             text = text.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
-            text = text.replace(/`([^`]+)`/g, '<span class="inline-code">$1</span>');
+            text = text.replace(/`([^`]+)`/g, '<code style="background:rgba(16,185,129,0.2);padding:2px 6px;border-radius:4px;">$1</code>');
             text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
             text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
             text = text.replace(/\n/g, '<br>');
@@ -1931,32 +1444,21 @@
             return div.innerHTML;
         }
 
-        function openModal(id) {
-            document.getElementById(id).classList.add('active');
+        function copyText(btn) {
+            const text = btn.closest('.msg-wrapper').dataset.content;
+            navigator.clipboard.writeText(text).then(() => showToast('Nusxalandi!'));
         }
 
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-        }
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+        function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); }
 
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('open');
-        }
-
-        function closeSidebar() {
-            document.getElementById('sidebar').classList.remove('open');
-        }
-
-        function showToast(message, type = 'success') {
+        function showToast(msg, isError = false) {
             const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = `toast ${type} show`;
+            toast.textContent = msg;
+            toast.className = `toast show${isError ? ' error' : ''}`;
             setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        function playSound(type) {
-            // Sound effects placeholder
-            console.log('Sound:', type);
         }
     </script>
 </body>
