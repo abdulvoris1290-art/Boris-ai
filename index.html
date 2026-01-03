@@ -1151,9 +1151,9 @@
                             <option value="groq:llama-3.1-8b-instant">LLaMA 3.1 8B (Tez)</option>
                             <option value="groq:mixtral-8x7b-32768">Mixtral 8x7B</option>
                         </optgroup>
-                        <optgroup label="Rasm tahlili">
-                            <option value="groq-vision:llama-3.2-11b-vision-preview">LLaMA 3.2 Vision 11B</option>
-                            <option value="groq-vision:llama-3.2-90b-vision-preview">LLaMA 3.2 Vision 90B</option>
+                        <optgroup label="Rasm tahlili (Together AI)">
+                            <option value="together-vision:meta-llama/Llama-Vision-Free">LLaMA Vision (Bepul)</option>
+                            <option value="together-vision:meta-llama/Llama-3.2-11B-Vision-Instruct-Turbo">LLaMA 3.2 Vision 11B</option>
                         </optgroup>
                     </select>
                     <button class="header-btn" onclick="exportChat()" title="Eksport">📥</button>
@@ -1172,13 +1172,13 @@
                         </p>
                     </div>
 
-                    <div class="api-setup-section" style="grid-template-columns: 1fr;">
+                    <div class="api-setup-section">
                         <div class="api-card">
                             <div class="api-card-header">
                                 <div class="api-card-icon groq">⚡</div>
                                 <div>
                                     <div class="api-card-title">Groq API (Bepul)</div>
-                                    <div class="api-card-desc">Matn + Rasm tahlili</div>
+                                    <div class="api-card-desc">Matn uchun - LLaMA, Mixtral</div>
                                 </div>
                             </div>
                             <div class="api-input-row">
@@ -1187,6 +1187,21 @@
                             </div>
                             <a href="https://console.groq.com/keys" target="_blank" class="api-link">Bepul kalit olish →</a>
                             <div class="api-status" id="groqStatus"></div>
+                        </div>
+                        <div class="api-card">
+                            <div class="api-card-header">
+                                <div class="api-card-icon gemini">📷</div>
+                                <div>
+                                    <div class="api-card-title">Together AI (Bepul)</div>
+                                    <div class="api-card-desc">Rasm tahlili - Vision model</div>
+                                </div>
+                            </div>
+                            <div class="api-input-row">
+                                <input type="password" class="api-input" id="togetherKeyInput" placeholder="API kalit...">
+                                <button class="api-save-btn" onclick="saveTogetherKey()">Saqlash</button>
+                            </div>
+                            <a href="https://api.together.ai/settings/api-keys" target="_blank" class="api-link">Bepul kalit olish →</a>
+                            <div class="api-status" id="togetherStatus"></div>
                         </div>
                     </div>
 
@@ -1302,6 +1317,7 @@
 
         // ==================== APP STATE ====================
         let groqKey = localStorage.getItem('groq_api_key') || '';
+        let togetherKey = localStorage.getItem('together_api_key') || '';
         let currentUser = null;
         let messages = [];
         let allChats = JSON.parse(localStorage.getItem('boris_chats') || '[]');
@@ -1339,6 +1355,7 @@
         // ==================== API KEY MANAGEMENT ====================
         function updateApiStatuses() {
             const groqStatus = document.getElementById('groqStatus');
+            const togetherStatus = document.getElementById('togetherStatus');
 
             if (groqKey) {
                 groqStatus.className = 'api-status active';
@@ -1346,6 +1363,14 @@
             } else {
                 groqStatus.className = 'api-status inactive';
                 groqStatus.innerHTML = '✗ Kiritilmagan';
+            }
+
+            if (togetherKey) {
+                togetherStatus.className = 'api-status active';
+                togetherStatus.innerHTML = '✓ Faol';
+            } else {
+                togetherStatus.className = 'api-status inactive';
+                togetherStatus.innerHTML = '✗ Kiritilmagan';
             }
         }
 
@@ -1360,6 +1385,19 @@
             document.getElementById('groqKeyInput').value = '';
             updateApiStatuses();
             showToast('Groq API kalit saqlandi!', 'success');
+        }
+
+        function saveTogetherKey() {
+            const key = document.getElementById('togetherKeyInput').value.trim();
+            if (!key || key.length < 20) {
+                showToast('Together API kalit noto\'g\'ri', 'error');
+                return;
+            }
+            togetherKey = key;
+            localStorage.setItem('together_api_key', key);
+            document.getElementById('togetherKeyInput').value = '';
+            updateApiStatuses();
+            showToast('Together AI API kalit saqlandi!', 'success');
         }
 
         // ==================== AUTH FUNCTIONS ====================
@@ -1433,9 +1471,9 @@
 
                 // Auto-select Vision model for images
                 const modelSelect = document.getElementById('modelSelect');
-                if (!modelSelect.value.startsWith('groq-vision:')) {
-                    modelSelect.value = 'groq-vision:llama-3.2-11b-vision-preview';
-                    showToast('Rasm tahlili uchun Vision model tanlandi', 'success');
+                if (!modelSelect.value.startsWith('together-vision:')) {
+                    modelSelect.value = 'together-vision:meta-llama/Llama-Vision-Free';
+                    showToast('Rasm tahlili uchun Together Vision model tanlandi', 'success');
                 }
             };
             reader.readAsDataURL(file);
@@ -1500,12 +1538,16 @@
             const [provider, model] = selectedModel.split(':');
 
             // Check API keys
-            if ((provider === 'groq' || provider === 'groq-vision') && !groqKey) {
+            if (provider === 'groq' && !groqKey) {
                 showToast('Avval Groq API kalitni kiriting!', 'error');
                 return;
             }
-            if (currentImage && provider !== 'groq-vision') {
-                showToast('Rasm tahlili uchun Vision modelini tanlang!', 'error');
+            if (provider === 'together-vision' && !togetherKey) {
+                showToast('Avval Together AI API kalitni kiriting!', 'error');
+                return;
+            }
+            if (currentImage && provider !== 'together-vision') {
+                showToast('Rasm tahlili uchun Together Vision modelini tanlang!', 'error');
                 return;
             }
 
@@ -1542,8 +1584,8 @@
 
             // Call appropriate API
             let response;
-            if (provider === 'groq-vision') {
-                response = await callGroqVisionAPI(text, imageToSend, model);
+            if (provider === 'together-vision') {
+                response = await callTogetherVisionAPI(text, imageToSend, model);
             } else {
                 response = await callGroqAPI(text, model);
             }
@@ -1613,14 +1655,14 @@ Qoidalar:
             }
         }
 
-        async function callGroqVisionAPI(text, imageBase64, model) {
+        async function callTogetherVisionAPI(text, imageBase64, model) {
             try {
                 const imageUrl = `data:image/jpeg;base64,${imageBase64}`;
 
-                const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                const response = await fetch('https://api.together.xyz/v1/chat/completions', {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${groqKey}`,
+                        'Authorization': `Bearer ${togetherKey}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
@@ -1631,7 +1673,7 @@ Qoidalar:
                                 content: [
                                     {
                                         type: 'text',
-                                        text: `Sen Boris AI - O'zbek tilidagi AI yordamchi. O'zbek tilida javob ber.\n\n${text}`
+                                        text: `Sen Boris AI - O'zbek tilidagi AI yordamchi. O'zbek tilida javob ber. Rasmni tahlil qil va savollarga javob ber.\n\n${text}`
                                     },
                                     {
                                         type: 'image_url',
@@ -1649,7 +1691,7 @@ Qoidalar:
 
                 if (!response.ok) {
                     const error = await response.json().catch(() => ({}));
-                    if (response.status === 401) return '❌ Groq API kalit noto\'g\'ri!';
+                    if (response.status === 401) return '❌ Together API kalit noto\'g\'ri!';
                     if (response.status === 429) return '⏳ Limit tugadi. Bir oz kuting...';
                     return '❌ Xatolik: ' + (error.error?.message || response.status);
                 }
@@ -1657,7 +1699,7 @@ Qoidalar:
                 const data = await response.json();
                 return data.choices[0].message.content;
             } catch (error) {
-                console.error('Groq Vision API Error:', error);
+                console.error('Together Vision API Error:', error);
                 return '❌ Tarmoq xatosi: ' + error.message;
             }
         }
