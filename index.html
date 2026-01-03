@@ -1205,6 +1205,32 @@
 
         .hidden { display: none !important; }
 
+        .free-features-banner {
+            background: linear-gradient(135deg, rgba(0, 212, 126, 0.1) 0%, rgba(191, 90, 242, 0.1) 100%);
+            border: 1px solid rgba(0, 212, 126, 0.3);
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .free-badge {
+            display: inline-block;
+            background: var(--gradient-1);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 20px rgba(0, 212, 126, 0.3);
+        }
+
+        .free-features-banner p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            margin: 0;
+        }
+
         /* ==================== MOBILE ==================== */
         @media (max-width: 900px) {
             .api-setup-section { grid-template-columns: 1fr; }
@@ -1296,9 +1322,9 @@
                             <option value="groq:llama-3.1-8b-instant">LLaMA 3.1 8B (Tez)</option>
                             <option value="groq:mixtral-8x7b-32768">Mixtral 8x7B</option>
                         </optgroup>
-                        <optgroup label="👁️ Rasm tahlili (Bepul)">
-                            <option value="hf-vision:Salesforce/blip-image-captioning-large">BLIP Vision (Bepul)</option>
-                            <option value="hf-vision:nlpconnect/vit-gpt2-image-captioning">ViT-GPT2 Vision</option>
+                        <optgroup label="👁️ Rasm tahlili (API key kerak emas!)">
+                            <option value="pollinations-vision:openai">GPT-4 Vision (Bepul)</option>
+                            <option value="pollinations-vision:claude">Claude Vision (Bepul)</option>
                         </optgroup>
                         <optgroup label="🎨 Rasm yaratish (Bepul)">
                             <option value="pollinations:flux">FLUX (Eng yaxshi)</option>
@@ -1321,7 +1347,7 @@
                         </p>
                     </div>
 
-                    <div class="api-setup-section">
+                    <div class="api-setup-section" style="grid-template-columns: 1fr; max-width: 500px; margin: 0 auto 50px;">
                         <div class="api-card">
                             <div class="api-card-header">
                                 <div class="api-card-icon groq">⚡</div>
@@ -1337,21 +1363,11 @@
                             <a href="https://console.groq.com/keys" target="_blank" class="api-link">Bepul kalit olish →</a>
                             <div class="api-status" id="groqStatus"></div>
                         </div>
-                        <div class="api-card">
-                            <div class="api-card-header">
-                                <div class="api-card-icon gemini">🤗</div>
-                                <div>
-                                    <div class="api-card-title">Hugging Face (Bepul)</div>
-                                    <div class="api-card-desc">Rasm tahlili - Vision AI</div>
-                                </div>
-                            </div>
-                            <div class="api-input-row">
-                                <input type="password" class="api-input" id="hfKeyInput" placeholder="hf_...">
-                                <button class="api-save-btn" onclick="saveHfKey()">Saqlash</button>
-                            </div>
-                            <a href="https://huggingface.co/settings/tokens" target="_blank" class="api-link">Bepul kalit olish →</a>
-                            <div class="api-status" id="hfStatus"></div>
-                        </div>
+                    </div>
+
+                    <div class="free-features-banner">
+                        <div class="free-badge">🎉 API KEY KERAK EMAS!</div>
+                        <p>Rasm yaratish va rasm tahlili - 100% bepul, ro'yxatdan o'tish shart emas!</p>
                     </div>
 
                     <div class="features-title">Nima qila olaman?</div>
@@ -1467,7 +1483,6 @@
 
         // ==================== APP STATE ====================
         let groqKey = localStorage.getItem('groq_api_key') || '';
-        let hfKey = localStorage.getItem('hf_api_key') || '';
         let currentUser = null;
         let messages = [];
         let allChats = JSON.parse(localStorage.getItem('boris_chats') || '[]');
@@ -1505,7 +1520,6 @@
         // ==================== API KEY MANAGEMENT ====================
         function updateApiStatuses() {
             const groqStatus = document.getElementById('groqStatus');
-            const hfStatus = document.getElementById('hfStatus');
 
             if (groqKey) {
                 groqStatus.className = 'api-status active';
@@ -1513,14 +1527,6 @@
             } else {
                 groqStatus.className = 'api-status inactive';
                 groqStatus.innerHTML = '✗ Kiritilmagan';
-            }
-
-            if (hfKey) {
-                hfStatus.className = 'api-status active';
-                hfStatus.innerHTML = '✓ Faol';
-            } else {
-                hfStatus.className = 'api-status inactive';
-                hfStatus.innerHTML = '✗ Kiritilmagan';
             }
         }
 
@@ -1535,19 +1541,6 @@
             document.getElementById('groqKeyInput').value = '';
             updateApiStatuses();
             showToast('Groq API kalit saqlandi!', 'success');
-        }
-
-        function saveHfKey() {
-            const key = document.getElementById('hfKeyInput').value.trim();
-            if (!key.startsWith('hf_')) {
-                showToast('Kalit "hf_" bilan boshlanishi kerak', 'error');
-                return;
-            }
-            hfKey = key;
-            localStorage.setItem('hf_api_key', key);
-            document.getElementById('hfKeyInput').value = '';
-            updateApiStatuses();
-            showToast('Hugging Face API kalit saqlandi!', 'success');
         }
 
         // ==================== AUTH FUNCTIONS ====================
@@ -1621,9 +1614,9 @@
 
                 // Auto-select Vision model for images
                 const modelSelect = document.getElementById('modelSelect');
-                if (!modelSelect.value.startsWith('hf-vision:')) {
-                    modelSelect.value = 'hf-vision:Salesforce/blip-image-captioning-large';
-                    showToast('Rasm tahlili uchun BLIP Vision model tanlandi', 'success');
+                if (!modelSelect.value.startsWith('pollinations-vision:')) {
+                    modelSelect.value = 'pollinations-vision:openai';
+                    showToast('Rasm tahlili uchun GPT-4 Vision tanlandi (Bepul!)', 'success');
                 }
             };
             reader.readAsDataURL(file);
@@ -1692,15 +1685,11 @@
                 showToast('Avval Groq API kalitni kiriting!', 'error');
                 return;
             }
-            if (provider === 'hf-vision' && !hfKey) {
-                showToast('Avval Hugging Face API kalitni kiriting!', 'error');
+            // Pollinations Vision va Image Generation - API key kerak emas!
+            if (currentImage && provider !== 'pollinations-vision') {
+                showToast('Rasm tahlili uchun Vision modelini tanlang!', 'error');
                 return;
             }
-            if (currentImage && provider !== 'hf-vision') {
-                showToast('Rasm tahlili uchun HF Vision modelini tanlang!', 'error');
-                return;
-            }
-            // Pollinations rasm yaratish uchun API key kerak emas!
 
             // Create new chat if needed
             if (!currentChatId) {
@@ -1737,8 +1726,8 @@
             let response;
             if (provider === 'pollinations') {
                 response = await generateImageWithPollinations(text, model);
-            } else if (provider === 'hf-vision') {
-                response = await callHuggingFaceVisionAPI(text, imageToSend, model);
+            } else if (provider === 'pollinations-vision') {
+                response = await callPollinationsVisionAPI(text, imageToSend, model);
             } else {
                 response = await callGroqAPI(text, model);
             }
@@ -1853,45 +1842,64 @@ Qoidalar:
             }
         }
 
-        async function callHuggingFaceVisionAPI(text, imageBase64, model) {
+        async function callPollinationsVisionAPI(text, imageBase64, model) {
             try {
-                // Convert base64 to blob
-                const byteCharacters = atob(imageBase64);
-                const byteNumbers = new Array(byteCharacters.length);
-                for (let i = 0; i < byteCharacters.length; i++) {
-                    byteNumbers[i] = byteCharacters.charCodeAt(i);
-                }
-                const byteArray = new Uint8Array(byteNumbers);
-                const blob = new Blob([byteArray], { type: 'image/jpeg' });
+                // Pollinations AI - 100% bepul, API key kerak emas!
+                const imageUrl = `data:image/jpeg;base64,${imageBase64}`;
+                const systemPrompt = "Sen Boris AI - O'zbek tilidagi AI yordamchi. Rasmni tahlil qilib, o'zbek tilida batafsil javob ber.";
+                const userPrompt = text || "Bu rasmda nima bor? Batafsil tavsifla.";
 
-                const response = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
+                const response = await fetch('https://text.pollinations.ai/openai', {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${hfKey}`,
+                        'Content-Type': 'application/json'
                     },
-                    body: blob
+                    body: JSON.stringify({
+                        model: model === 'claude' ? 'claude' : 'openai',
+                        messages: [
+                            {
+                                role: 'system',
+                                content: systemPrompt
+                            },
+                            {
+                                role: 'user',
+                                content: [
+                                    {
+                                        type: 'text',
+                                        text: userPrompt
+                                    },
+                                    {
+                                        type: 'image_url',
+                                        image_url: {
+                                            url: imageUrl
+                                        }
+                                    }
+                                ]
+                            }
+                        ],
+                        max_tokens: 2000
+                    })
                 });
 
                 if (!response.ok) {
-                    const error = await response.json().catch(() => ({}));
-                    if (response.status === 401) return '❌ Hugging Face API kalit noto\'g\'ri!';
-                    if (response.status === 429) return '⏳ Limit tugadi. Bir oz kuting...';
-                    if (response.status === 503) return '⏳ Model yuklanmoqda... 10-20 soniya kuting va qayta urinib ko\'ring.';
-                    return '❌ Xatolik: ' + (error.error || response.status);
+                    const errorText = await response.text();
+                    if (response.status === 429) return '⏳ Juda ko\'p so\'rov. Bir oz kuting...';
+                    return '❌ Xatolik: ' + errorText;
                 }
 
                 const data = await response.json();
+                if (data.choices && data.choices[0]?.message?.content) {
+                    return `📷 **Rasm tahlili:**\n\n${data.choices[0].message.content}`;
+                }
 
-                // BLIP model returns array with generated_text
-                if (Array.isArray(data) && data[0]?.generated_text) {
-                    const caption = data[0].generated_text;
-                    // Translate and format response
-                    return `📷 **Rasmda ko'rinmoqda:**\n\n${caption}\n\n---\n💡 *Savol bering - men batafsil javob beraman!*`;
+                // Sometimes returns plain text
+                if (typeof data === 'string') {
+                    return `📷 **Rasm tahlili:**\n\n${data}`;
                 }
 
                 return '❌ Kutilmagan javob formati';
             } catch (error) {
-                console.error('HuggingFace Vision API Error:', error);
+                console.error('Pollinations Vision API Error:', error);
                 return '❌ Tarmoq xatosi: ' + error.message;
             }
         }
