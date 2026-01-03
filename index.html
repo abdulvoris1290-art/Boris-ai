@@ -2,1099 +2,246 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Boris AI Ultra</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
-    <meta name="description" content="Boris AI - Groq + LLaMA asosidagi tezkor AI yordamchi">
-    <meta name="theme-color" content="#6366f1">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boris AI</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #111111;
-            --bg-tertiary: #1a1a1a;
-            --bg-hover: #252525;
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0a0;
-            --text-muted: #666666;
-            --accent: #6366f1;
-            --accent-hover: #818cf8;
-            --accent-glow: rgba(99, 102, 241, 0.25);
-            --success: #22c55e;
-            --error: #ef4444;
-            --border: #2a2a2a;
-            --gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-        }
-        
-        html, body { height: 100%; overflow: hidden; }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-        }
-        
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes typing { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
-        .app { display: flex; height: 100vh; height: 100dvh; }
-        
-        .sidebar {
-            width: 280px;
-            background: var(--bg-secondary);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.3s ease;
-            z-index: 100;
-        }
-        
-        .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.4rem;
-            font-weight: 700;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .logo-icon { font-size: 1.8rem; }
-        
-        .new-chat-btn {
-            width: 100%;
-            padding: 12px 16px;
-            margin-top: 16px;
-            background: var(--gradient);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-        
-        .new-chat-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 20px var(--accent-glow); }
-        
-        .sidebar-content { flex: 1; overflow-y: auto; padding: 12px; }
-        
-        .section-title {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin: 8px 8px 12px;
-        }
-        
-        .chat-list { display: flex; flex-direction: column; gap: 4px; }
-        
-        .chat-item {
-            padding: 12px 14px;
-            background: transparent;
-            border: none;
-            border-radius: 10px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            cursor: pointer;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.2s;
-            width: 100%;
-        }
-        
-        .chat-item:hover { background: var(--bg-tertiary); color: var(--text-primary); }
-        .chat-item.active { background: var(--bg-tertiary); color: var(--text-primary); border-left: 3px solid var(--accent); }
-        
-        .chat-item-title { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        
-        .chat-item-delete {
-            opacity: 0;
-            background: none;
-            border: none;
-            color: var(--error);
-            cursor: pointer;
-            padding: 4px 8px;
-            font-size: 0.85rem;
-            border-radius: 6px;
-        }
-        
-        .chat-item:hover .chat-item-delete { opacity: 1; }
-        
-        .sidebar-footer { padding: 12px; border-top: 1px solid var(--border); }
-        
-        .sidebar-btn {
-            width: 100%;
-            padding: 10px 14px;
-            background: transparent;
-            border: none;
-            border-radius: 8px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.2s;
-            margin-bottom: 4px;
-        }
-        
-        .sidebar-btn:hover { background: var(--bg-tertiary); color: var(--text-primary); }
-        
-        .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-        
-        .header {
-            padding: 12px 20px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: var(--bg-secondary);
-        }
-        
-        .menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 8px;
-        }
-        
-        .model-area { display: flex; align-items: center; gap: 12px; }
-        
-        .model-select {
-            padding: 10px 14px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            color: var(--text-primary);
-            font-size: 0.9rem;
-            cursor: pointer;
-            outline: none;
-        }
-        
-        .model-select:focus { border-color: var(--accent); }
-        
-        .api-status {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            padding: 8px 12px;
-            background: var(--bg-tertiary);
-            border-radius: 20px;
-        }
-        
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--error); }
-        .status-dot.on { background: var(--success); animation: pulse 2s infinite; }
-        
-        .header-btns { display: flex; gap: 6px; }
-        
-        .icon-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 10px;
-            transition: all 0.2s;
-        }
-        
-        .icon-btn:hover { background: var(--bg-tertiary); color: var(--text-primary); }
-        
-        .chat-area { flex: 1; overflow-y: auto; padding: 24px; }
-        
-        .welcome {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            text-align: center;
-            padding: 20px;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .welcome-icon { font-size: 4.5rem; margin-bottom: 20px; }
-        
-        .welcome-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .welcome-desc { color: var(--text-secondary); margin-bottom: 28px; max-width: 450px; font-size: 1.05rem; }
-        
-        .api-box {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 32px;
-            width: 100%;
-            max-width: 380px;
-            text-align: left;
-        }
-        
-        .api-box-title { font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-        
-        .api-input {
-            width: 100%;
-            padding: 12px 14px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            color: var(--text-primary);
-            font-size: 0.95rem;
-            outline: none;
-        }
-        
-        .api-input:focus { border-color: var(--accent); }
-        
-        .api-save-btn {
-            width: 100%;
-            padding: 12px;
-            margin-top: 12px;
-            background: var(--gradient);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .api-save-btn:hover { transform: translateY(-2px); }
-        
-        .api-link { display: block; color: var(--accent); font-size: 0.85rem; margin-top: 12px; text-decoration: none; }
-        .api-link:hover { text-decoration: underline; }
-        
-        .features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; max-width: 500px; width: 100%; }
-        
-        .feature {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: left;
-        }
-        
-        .feature:hover { border-color: var(--accent); transform: translateY(-3px); }
-        .feature-icon { font-size: 1.8rem; margin-bottom: 10px; }
-        .feature-title { font-weight: 600; margin-bottom: 4px; }
-        .feature-desc { font-size: 0.8rem; color: var(--text-secondary); }
-        
-        .messages { max-width: 850px; margin: 0 auto; width: 100%; }
-        
-        .msg {
-            display: flex;
-            gap: 14px;
-            margin-bottom: 20px;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .msg-avatar {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-        
-        .msg.user .msg-avatar { background: var(--gradient); }
-        .msg.bot .msg-avatar { background: var(--bg-tertiary); border: 1px solid var(--border); }
-        
-        .msg-body { flex: 1; min-width: 0; }
-        .msg-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
-        
-        .msg-text { line-height: 1.7; word-wrap: break-word; }
-        .msg-text p { margin-bottom: 10px; }
-        .msg-text p:last-child { margin-bottom: 0; }
-        
-        .msg-text pre {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 14px;
-            overflow-x: auto;
-            margin: 12px 0;
-        }
-        
-        .msg-text code { font-family: 'Monaco', 'Menlo', monospace; font-size: 0.9rem; }
-        .msg-text :not(pre) > code { background: var(--bg-tertiary); padding: 2px 6px; border-radius: 4px; }
-        
-        .msg-text ul, .msg-text ol { margin: 10px 0; padding-left: 20px; }
-        .msg-text li { margin-bottom: 5px; }
-        
-        .msg-img { max-width: 300px; border-radius: 10px; margin-top: 10px; cursor: pointer; border: 1px solid var(--border); }
-        
-        .typing { display: flex; gap: 5px; padding: 8px 0; }
-        .typing span { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: typing 1.4s infinite ease-in-out; }
+        body { font-family: system-ui, sans-serif; background: #0f0f0f; color: #fff; min-height: 100vh; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; height: 100vh; }
+        .header { text-align: center; padding: 20px 0; border-bottom: 1px solid #333; }
+        .header h1 { font-size: 2rem; background: linear-gradient(135deg, #6366f1, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header p { color: #888; margin-top: 8px; }
+        .api-section { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 20px; margin: 20px 0; }
+        .api-section label { display: block; margin-bottom: 8px; color: #aaa; }
+        .api-section input { width: 100%; padding: 12px; background: #252525; border: 1px solid #444; border-radius: 8px; color: #fff; font-size: 1rem; }
+        .api-section input:focus { outline: none; border-color: #6366f1; }
+        .api-section button { width: 100%; padding: 12px; margin-top: 12px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none; border-radius: 8px; color: #fff; font-size: 1rem; font-weight: 600; cursor: pointer; }
+        .api-section a { display: block; text-align: center; margin-top: 12px; color: #6366f1; text-decoration: none; }
+        .model-select { padding: 10px; background: #252525; border: 1px solid #444; border-radius: 8px; color: #fff; margin: 10px 0; }
+        .chat { flex: 1; overflow-y: auto; padding: 20px 0; }
+        .msg { display: flex; gap: 12px; margin-bottom: 16px; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .msg-avatar { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+        .msg.user .msg-avatar { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+        .msg.bot .msg-avatar { background: #333; }
+        .msg-content { flex: 1; }
+        .msg-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+        .msg-text { line-height: 1.6; }
+        .msg-text pre { background: #1a1a1a; padding: 12px; border-radius: 8px; overflow-x: auto; margin: 10px 0; }
+        .msg-text code { font-family: monospace; }
+        .msg-text p { margin-bottom: 8px; }
+        .msg-img { max-width: 300px; border-radius: 8px; margin-top: 8px; }
+        .typing span { display: inline-block; width: 8px; height: 8px; background: #6366f1; border-radius: 50%; margin-right: 4px; animation: bounce 1.4s infinite; }
         .typing span:nth-child(2) { animation-delay: 0.2s; }
         .typing span:nth-child(3) { animation-delay: 0.4s; }
-        
-        .input-area { padding: 16px 20px; background: var(--bg-primary); border-top: 1px solid var(--border); }
-        .input-container { max-width: 850px; margin: 0 auto; }
-        
-        .img-preview { display: none; margin-bottom: 10px; }
-        .img-preview.show { display: flex; align-items: center; gap: 10px; }
-        .img-preview-wrap { position: relative; }
-        .img-preview img { max-height: 100px; border-radius: 10px; border: 1px solid var(--border); }
-        
-        .img-remove {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            width: 24px;
-            height: 24px;
-            background: var(--error);
-            border: none;
-            border-radius: 50%;
-            color: white;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-        
-        .input-wrap {
-            display: flex;
-            align-items: flex-end;
-            gap: 10px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 10px 14px;
-            transition: border-color 0.2s;
-        }
-        
-        .input-wrap:focus-within { border-color: var(--accent); }
-        .input-wrap.dragover { border-color: var(--accent); background: rgba(99, 102, 241, 0.05); }
-        
-        .input-btns { display: flex; gap: 4px; }
-        
-        .in-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.3rem;
-            cursor: pointer;
-            padding: 6px;
-            border-radius: 8px;
-            transition: all 0.2s;
-        }
-        
-        .in-btn:hover { color: var(--text-primary); background: var(--bg-tertiary); }
-        .in-btn.rec { color: var(--error); animation: pulse 1s infinite; }
-        
-        #msgInput {
-            flex: 1;
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            font-size: 1rem;
-            resize: none;
-            max-height: 150px;
-            outline: none;
-            font-family: inherit;
-        }
-        
-        #msgInput::placeholder { color: var(--text-muted); }
-        #imgInput { display: none; }
-        
-        .send-btn {
-            background: var(--gradient);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 10px 12px;
-            transition: all 0.2s;
-        }
-        
-        .send-btn:hover:not(:disabled) { transform: scale(1.05); }
-        .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        
-        .hints { text-align: center; font-size: 0.75rem; color: var(--text-muted); margin-top: 10px; }
-        .hints kbd { background: var(--bg-tertiary); padding: 3px 6px; border-radius: 4px; margin: 0 4px; }
-        
-        .drop-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(99, 102, 241, 0.1);
-            backdrop-filter: blur(4px);
-            z-index: 999;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .drop-overlay.show { display: flex; }
-        
-        .drop-box {
-            background: var(--bg-secondary);
-            border: 3px dashed var(--accent);
-            border-radius: 20px;
-            padding: 50px 70px;
-            text-align: center;
-        }
-        
-        .drop-icon { font-size: 4rem; margin-bottom: 16px; }
-        .drop-text { font-size: 1.2rem; color: var(--text-secondary); }
-        
-        .toast {
-            position: fixed;
-            bottom: 90px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            padding: 12px 20px;
-            border-radius: 10px;
-            z-index: 1001;
-            opacity: 0;
-            transition: all 0.3s ease;
-        }
-        
-        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-        .toast.ok { border-color: var(--success); }
-        .toast.err { border-color: var(--error); }
-        
-        .modal-bg {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.75);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        
-        .modal-bg.show { display: flex; }
-        
-        .modal {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            width: 100%;
-            max-width: 400px;
-            max-height: 85vh;
-            overflow-y: auto;
-            animation: fadeIn 0.2s ease;
-        }
-        
-        .modal-head {
-            padding: 18px 20px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .modal-title { font-size: 1.1rem; font-weight: 600; }
-        
-        .modal-x {
-            background: var(--bg-tertiary);
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 6px 10px;
-            border-radius: 8px;
-        }
-        
-        .modal-body { padding: 20px; }
-        
-        .modal-btn {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .btn-main { background: var(--gradient); color: white; }
-        .btn-sec { background: var(--bg-tertiary); color: var(--text-primary); margin-top: 10px; }
-        .btn-danger { background: var(--error); color: white; }
-        
-        .toggle-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .toggle-row:last-child { border-bottom: none; }
-        
-        .toggle { position: relative; width: 48px; height: 26px; }
-        .toggle input { opacity: 0; width: 0; height: 0; }
-        
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            inset: 0;
-            background: var(--bg-tertiary);
-            border-radius: 26px;
-            transition: 0.3s;
-        }
-        
-        .slider:before {
-            content: "";
-            position: absolute;
-            height: 20px;
-            width: 20px;
-            left: 3px;
-            bottom: 3px;
-            background: white;
-            border-radius: 50%;
-            transition: 0.3s;
-        }
-        
-        input:checked + .slider { background: var(--accent); }
-        input:checked + .slider:before { transform: translateX(22px); }
-        
-        .img-modal { max-width: 90vw; background: transparent; border: none; }
-        .img-modal img { max-width: 100%; max-height: 85vh; border-radius: 10px; }
-        
-        @media (max-width: 768px) {
-            .sidebar { position: fixed; top: 0; left: 0; bottom: 0; transform: translateX(-100%); }
-            .sidebar.open { transform: translateX(0); }
-            .sidebar-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
-            .sidebar-bg.show { display: block; }
-            .menu-btn { display: block; }
-            .features { grid-template-columns: 1fr; }
-            .welcome-title { font-size: 1.6rem; }
-            .hints { display: none; }
-            .api-status { display: none; }
-        }
-        
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-8px); } }
+        .input-area { border-top: 1px solid #333; padding-top: 16px; }
+        .img-preview { margin-bottom: 10px; position: relative; display: inline-block; }
+        .img-preview img { max-height: 80px; border-radius: 8px; }
+        .img-preview button { position: absolute; top: -8px; right: -8px; width: 24px; height: 24px; background: #ef4444; border: none; border-radius: 50%; color: #fff; cursor: pointer; }
+        .input-wrap { display: flex; gap: 10px; background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 10px; }
+        .input-wrap:focus-within { border-color: #6366f1; }
+        .input-wrap button { background: none; border: none; color: #888; font-size: 1.3rem; cursor: pointer; padding: 8px; }
+        .input-wrap button:hover { color: #fff; }
+        .input-wrap textarea { flex: 1; background: none; border: none; color: #fff; font-size: 1rem; resize: none; outline: none; font-family: inherit; }
+        .send-btn { background: linear-gradient(135deg, #6366f1, #8b5cf6) !important; color: #fff !important; border-radius: 8px !important; padding: 8px 16px !important; }
+        .hidden { display: none !important; }
+        .status { text-align: center; padding: 8px; background: #1a1a1a; border-radius: 8px; margin-bottom: 10px; font-size: 0.9rem; }
+        .status.ok { color: #22c55e; }
+        .status.err { color: #ef4444; }
     </style>
 </head>
 <body>
-    <div class="app">
-        <div class="sidebar-bg" id="sidebarBg" onclick="closeSidebar()"></div>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Boris AI</h1>
+            <p>Groq + LLaMA asosidagi tezkor AI yordamchi</p>
+        </div>
         
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <div class="logo"><span class="logo-icon">🤖</span><span>Boris AI</span></div>
-                <button class="new-chat-btn" onclick="newChat()">✨ Yangi suhbat</button>
-            </div>
-            <div class="sidebar-content">
-                <div class="section-title">Suhbatlar tarixi</div>
-                <div class="chat-list" id="chatList"></div>
-            </div>
-            <div class="sidebar-footer">
-                <button class="sidebar-btn" onclick="openSettings()">⚙️ Sozlamalar</button>
-                <button class="sidebar-btn" onclick="exportData()">📤 Eksport</button>
-                <button class="sidebar-btn" onclick="document.getElementById('importFile').click()">📥 Import</button>
-                <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
-            </div>
-        </aside>
+        <div class="api-section" id="apiSection">
+            <label>🔑 Groq API kalitini kiriting:</label>
+            <input type="password" id="apiKey" placeholder="gsk_...">
+            <button onclick="saveKey()">Saqlash</button>
+            <a href="https://console.groq.com/keys" target="_blank">👉 Bepul API kalit olish</a>
+        </div>
         
-        <main class="main">
-            <header class="header">
-                <button class="menu-btn" onclick="toggleSidebar()">☰</button>
-                <div class="model-area">
-                    <select class="model-select" id="modelSelect" onchange="saveSettings()">
-                        <option value="llama-3.3-70b-versatile">🧠 LLaMA 3.3 70B</option>
-                        <option value="llama-3.1-8b-instant">⚡ LLaMA 3.1 8B</option>
-                        <option value="llama-3.2-11b-vision-preview">👁️ Vision</option>
-                        <option value="mixtral-8x7b-32768">🔀 Mixtral</option>
-                    </select>
-                    <div class="api-status">
-                        <span class="status-dot" id="statusDot"></span>
-                        <span id="statusText">API kerak</span>
-                    </div>
-                </div>
-                <div class="header-btns">
-                    <button class="icon-btn" onclick="clearChat()" title="Tozalash">🗑️</button>
-                </div>
-            </header>
+        <div class="hidden" id="mainApp">
+            <div class="status ok" id="status">✓ API ulangan</div>
+            <select class="model-select" id="model">
+                <option value="llama-3.3-70b-versatile">🧠 LLaMA 3.3 70B (Umumiy)</option>
+                <option value="llama-3.1-8b-instant">⚡ LLaMA 3.1 8B (Tez)</option>
+                <option value="llama-3.2-11b-vision-preview">👁️ LLaMA Vision (Rasm uchun)</option>
+                <option value="mixtral-8x7b-32768">🔀 Mixtral 8x7B</option>
+            </select>
             
-            <div class="chat-area" id="chatArea">
-                <div class="welcome" id="welcome">
-                    <div class="welcome-icon">🤖</div>
-                    <h1 class="welcome-title">Assalomu alaykum!</h1>
-                    <p class="welcome-desc">Men Boris AI — Groq + LLaMA asosidagi tezkor AI yordamchiman. 📷 Rasm yuklang — tahlil qilaman!</p>
-                    <div class="api-box" id="apiBox">
-                        <div class="api-box-title">🔑 API kalitni kiriting</div>
-                        <input type="password" class="api-input" id="apiInput" placeholder="gsk_...">
-                        <button class="api-save-btn" onclick="saveApiKey()">Saqlash</button>
-                        <a href="https://console.groq.com/keys" target="_blank" class="api-link">👉 Bepul API kalit olish (Groq.com)</a>
-                    </div>
-                    <div class="features">
-                        <div class="feature" onclick="setPrompt('Python da oddiy kalkulator yozib ber')">
-                            <div class="feature-icon">💻</div>
-                            <div class="feature-title">Kod yozish</div>
-                            <div class="feature-desc">Har qanday tilda</div>
-                        </div>
-                        <div class="feature" onclick="setPrompt('Neyron tarmoqlar qanday ishlashini tushuntir')">
-                            <div class="feature-icon">🧠</div>
-                            <div class="feature-title">Tushuntirish</div>
-                            <div class="feature-desc">Sodda qilib</div>
-                        </div>
-                        <div class="feature" onclick="document.getElementById('imgInput').click()">
-                            <div class="feature-icon">📷</div>
-                            <div class="feature-title">Rasm tahlili</div>
-                            <div class="feature-desc">Yuklang, tahlil qilaman</div>
-                        </div>
-                        <div class="feature" onclick="setPrompt('Sun\'iy intellekt haqida qisqa maqola yoz')">
-                            <div class="feature-icon">✍️</div>
-                            <div class="feature-title">Yozish</div>
-                            <div class="feature-desc">Maqola, hikoya</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="messages" id="messages"></div>
-            </div>
+            <div class="chat" id="chat"></div>
             
             <div class="input-area">
-                <div class="input-container">
-                    <div class="img-preview" id="imgPreview">
-                        <div class="img-preview-wrap">
-                            <img src="" alt="" id="previewImg">
-                            <button class="img-remove" onclick="removeImg()">✕</button>
-                        </div>
-                    </div>
-                    <div class="input-wrap" id="inputWrap">
-                        <div class="input-btns">
-                            <button class="in-btn" onclick="document.getElementById('imgInput').click()" title="Rasm">📷</button>
-                            <button class="in-btn" id="voiceBtn" onclick="toggleVoice()" title="Ovoz">🎤</button>
-                        </div>
-                        <input type="file" id="imgInput" accept="image/*" onchange="handleImg(event)">
-                        <textarea id="msgInput" placeholder="Xabar yozing..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-                        <button class="send-btn" id="sendBtn" onclick="send()">➤</button>
-                    </div>
-                    <div class="hints"><kbd>📷</kbd> Ctrl+U <kbd>🎤</kbd> Ctrl+M <kbd>Enter</kbd> Yuborish</div>
+                <div class="img-preview hidden" id="imgPreview">
+                    <img src="" id="previewImg">
+                    <button onclick="removeImg()">✕</button>
                 </div>
-            </div>
-        </main>
-    </div>
-    
-    <div class="drop-overlay" id="dropZone"><div class="drop-box"><div class="drop-icon">📷</div><div class="drop-text">Rasmni tashlang</div></div></div>
-    <div class="toast" id="toast"></div>
-    
-    <div class="modal-bg" id="settingsModal">
-        <div class="modal">
-            <div class="modal-head"><span class="modal-title">⚙️ Sozlamalar</span><button class="modal-x" onclick="closeModal('settingsModal')">✕</button></div>
-            <div class="modal-body">
-                <div class="toggle-row"><span>Ovozli javob</span><label class="toggle"><input type="checkbox" id="voiceToggle" onchange="saveSettings()"><span class="slider"></span></label></div>
-                <div class="toggle-row"><span>Tovush</span><label class="toggle"><input type="checkbox" id="soundToggle" checked onchange="saveSettings()"><span class="slider"></span></label></div>
-                <div style="margin-top:20px">
-                    <label style="font-size:0.85rem;color:var(--text-secondary);display:block;margin-bottom:8px">API kalit</label>
-                    <input type="password" class="api-input" id="settingsApiKey" placeholder="gsk_...">
-                    <button class="modal-btn btn-main" style="margin-top:10px" onclick="saveApiFromSettings()">Saqlash</button>
+                <div class="input-wrap">
+                    <button onclick="document.getElementById('imgInput').click()">📷</button>
+                    <input type="file" id="imgInput" accept="image/*" style="display:none" onchange="handleImg(event)">
+                    <textarea id="msgInput" placeholder="Xabar yozing..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}"></textarea>
+                    <button class="send-btn" onclick="send()">➤</button>
                 </div>
-                <button class="modal-btn btn-danger" style="margin-top:20px" onclick="deleteAllChats()">🗑️ Barcha suhbatlarni o'chirish</button>
             </div>
         </div>
     </div>
-    
-    <div class="modal-bg" id="imgModal" onclick="closeModal('imgModal')"><div class="img-modal"><img src="" id="modalImg"></div></div>
 
     <script>
-        let chats = [], chatId = null, img = null, loading = false, recording = false, recognition = null;
-        let settings = { voice: false, sound: true, apiKey: '', model: 'llama-3.3-70b-versatile' };
+        let apiKey = localStorage.getItem('groqKey') || '';
+        let currentImg = null;
+        let messages = [];
 
-        document.addEventListener('DOMContentLoaded', init);
-
-        function init() {
-            loadSettings();
-            loadChats();
-            initMarked();
-            setupDragDrop();
-            setupKeys();
+        if (apiKey) {
+            document.getElementById('apiSection').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
         }
 
-        function initMarked() {
-            if (typeof marked !== 'undefined') {
-                marked.setOptions({ breaks: true, gfm: true, highlight: (code, lang) => {
-                    if (lang && hljs.getLanguage(lang)) return hljs.highlight(code, { language: lang }).value;
-                    return hljs.highlightAuto(code).value;
-                }});
+        function saveKey() {
+            const key = document.getElementById('apiKey').value.trim();
+            if (!key) return alert('API kalitni kiriting!');
+            apiKey = key;
+            localStorage.setItem('groqKey', key);
+            document.getElementById('apiSection').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+        }
+
+        function handleImg(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = ev => {
+                currentImg = ev.target.result;
+                document.getElementById('previewImg').src = currentImg;
+                document.getElementById('imgPreview').classList.remove('hidden');
+                document.getElementById('model').value = 'llama-3.2-11b-vision-preview';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeImg() {
+            currentImg = null;
+            document.getElementById('imgPreview').classList.add('hidden');
+            document.getElementById('imgInput').value = '';
+        }
+
+        function addMsg(role, content, img = null) {
+            const chat = document.getElementById('chat');
+            const avatar = role === 'user' ? '👤' : '🤖';
+            const name = role === 'user' ? 'Siz' : 'Boris AI';
+            const cls = role === 'user' ? 'user' : 'bot';
+            
+            let html = content;
+            if (role === 'bot' && typeof marked !== 'undefined') {
+                html = marked.parse(content);
             }
-        }
-
-        function loadSettings() {
-            const s = localStorage.getItem('borisSettings');
-            if (s) settings = { ...settings, ...JSON.parse(s) };
-            document.getElementById('voiceToggle').checked = settings.voice;
-            document.getElementById('soundToggle').checked = settings.sound;
-            document.getElementById('settingsApiKey').value = settings.apiKey;
-            document.getElementById('apiInput').value = settings.apiKey;
-            document.getElementById('modelSelect').value = settings.model;
-            updateApiStatus();
-        }
-
-        function saveSettings() {
-            settings.voice = document.getElementById('voiceToggle').checked;
-            settings.sound = document.getElementById('soundToggle').checked;
-            settings.model = document.getElementById('modelSelect').value;
-            localStorage.setItem('borisSettings', JSON.stringify(settings));
-        }
-
-        function saveApiKey() {
-            const k = document.getElementById('apiInput').value.trim();
-            if (!k) return toast('API kalitni kiriting', 'err');
-            settings.apiKey = k;
-            localStorage.setItem('borisSettings', JSON.stringify(settings));
-            updateApiStatus();
-            toast('API kalit saqlandi', 'ok');
-        }
-
-        function saveApiFromSettings() {
-            settings.apiKey = document.getElementById('settingsApiKey').value.trim();
-            localStorage.setItem('borisSettings', JSON.stringify(settings));
-            updateApiStatus();
-            closeModal('settingsModal');
-            toast('Saqlandi', 'ok');
-        }
-
-        function updateApiStatus() {
-            const dot = document.getElementById('statusDot');
-            const txt = document.getElementById('statusText');
-            const box = document.getElementById('apiBox');
-            if (settings.apiKey) {
-                dot.classList.add('on');
-                txt.textContent = 'Ulangan';
-                if (box) box.style.display = 'none';
-            } else {
-                dot.classList.remove('on');
-                txt.textContent = 'API kerak';
-                if (box) box.style.display = 'block';
-            }
-        }
-
-        function loadChats() {
-            const s = localStorage.getItem('borisChats');
-            if (s) chats = JSON.parse(s);
-            updateChatList();
-        }
-
-        function saveChat(c) {
-            const i = chats.findIndex(x => x.id === c.id);
-            if (i >= 0) chats[i] = c; else chats.unshift(c);
-            localStorage.setItem('borisChats', JSON.stringify(chats));
-            updateChatList();
-        }
-
-        function updateChatList() {
-            const el = document.getElementById('chatList');
-            if (!chats.length) { el.innerHTML = '<div style="color:var(--text-muted);font-size:0.85rem;padding:16px;text-align:center">Hozircha bo\'sh</div>'; return; }
-            el.innerHTML = chats.map(c => `
-                <button class="chat-item ${c.id === chatId ? 'active' : ''}" onclick="loadChat('${c.id}')">
-                    <span>💬</span>
-                    <span class="chat-item-title">${escHtml(c.title || 'Yangi suhbat')}</span>
-                    <button class="chat-item-delete" onclick="event.stopPropagation();delChat('${c.id}')">🗑️</button>
-                </button>
-            `).join('');
-        }
-
-        function loadChat(id) {
-            chatId = id;
-            const c = chats.find(x => x.id === id);
-            if (!c) return;
-            updateChatList();
-            renderMsgs(c.messages);
-            if (window.innerWidth <= 768) closeSidebar();
-        }
-
-        function newChat() {
-            chatId = null; img = null;
-            document.getElementById('imgPreview').classList.remove('show');
-            showWelcome();
-            document.getElementById('msgInput').value = '';
-            if (window.innerWidth <= 768) closeSidebar();
-            updateChatList();
-        }
-
-        function showWelcome() {
-            document.getElementById('welcome').style.display = 'flex';
-            document.getElementById('messages').innerHTML = '';
-            updateApiStatus();
-        }
-
-        function delChat(id) {
-            if (!confirm("O'chirmoqchimisiz?")) return;
-            chats = chats.filter(c => c.id !== id);
-            localStorage.setItem('borisChats', JSON.stringify(chats));
-            if (chatId === id) { chatId = null; showWelcome(); }
-            updateChatList();
-            toast("O'chirildi", 'ok');
-        }
-
-        function clearChat() {
-            if (!chatId) return;
-            if (!confirm("Tozalashni xohlaysizmi?")) return;
-            const c = chats.find(x => x.id === chatId);
-            if (c) { c.messages = []; saveChat(c); renderMsgs([]); }
-        }
-
-        function deleteAllChats() {
-            if (!confirm("Barchasini o'chirmoqchimisiz?")) return;
-            chats = []; chatId = null;
-            localStorage.removeItem('borisChats');
-            updateChatList();
-            showWelcome();
-            closeModal('settingsModal');
-            toast("O'chirildi", 'ok');
-        }
-
-        function renderMsgs(msgs) {
-            const el = document.getElementById('messages');
-            const w = document.getElementById('welcome');
-            if (!msgs?.length) { w.style.display = 'flex'; el.innerHTML = ''; return; }
-            w.style.display = 'none';
-            el.innerHTML = msgs.map(m => createMsg(m)).join('');
-            el.querySelectorAll('pre code').forEach(b => hljs.highlightElement(b));
-            scrollDown();
-        }
-
-        function createMsg(m) {
-            const av = m.role === 'user' ? '👤' : '🤖';
-            const nm = m.role === 'user' ? 'Siz' : 'Boris AI';
-            let txt = m.role === 'assistant' && typeof marked !== 'undefined' ? marked.parse(m.content) : escHtml(m.content).replace(/\n/g, '<br>');
-            let imgHtml = m.image ? `<img src="${m.image}" class="msg-img" onclick="viewImg(this.src)">` : '';
-            return `<div class="msg ${m.role === 'user' ? 'user' : 'bot'}">
-                <div class="msg-avatar">${av}</div>
-                <div class="msg-body"><div class="msg-name">${nm}</div><div class="msg-text">${txt}</div>${imgHtml}</div>
-            </div>`;
-        }
-
-        function escHtml(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
-        function scrollDown() { const el = document.getElementById('chatArea'); setTimeout(() => el.scrollTop = el.scrollHeight, 50); }
-
-        async function send() {
-            const inp = document.getElementById('msgInput');
-            const txt = inp.value.trim();
-            if ((!txt && !img) || loading) return;
-            if (!settings.apiKey) return toast('API kalitni kiriting!', 'err');
-
-            if (!chatId) {
-                chatId = 'c_' + Date.now();
-                saveChat({ id: chatId, title: txt.slice(0, 40) || 'Rasm', messages: [], createdAt: new Date().toISOString() });
-            }
-
-            const c = chats.find(x => x.id === chatId);
-            c.messages.push({ role: 'user', content: txt, image: img });
-            if (c.messages.length === 1) c.title = txt.slice(0, 40) || 'Rasm';
-            saveChat(c);
-            renderMsgs(c.messages);
-
-            inp.value = ''; inp.style.height = 'auto';
-            const imgSend = img; removeImg();
-            if (settings.sound) playSound();
-
-            loading = true;
-            showTyping();
-
-            try {
-                const model = document.getElementById('modelSelect').value;
-                const res = await callAI(txt, imgSend, c.messages.slice(0, -1), model);
-                hideTyping();
-                c.messages.push({ role: 'assistant', content: res });
-                saveChat(c);
-                renderMsgs(c.messages);
-                if (settings.voice) speak(res);
-            } catch(e) {
-                hideTyping();
-                c.messages.push({ role: 'assistant', content: '❌ Xatolik: ' + e.message });
-                saveChat(c);
-                renderMsgs(c.messages);
-                toast('Xatolik', 'err');
-            }
-
-            loading = false;
-        }
-
-        async function callAI(txt, image, history, model) {
-            const msgs = [];
-            history.slice(-8).forEach(m => {
-                if (m.image && model.includes('vision')) {
-                    msgs.push({ role: m.role, content: [{ type: 'text', text: m.content || 'Tahlil qil' }, { type: 'image_url', image_url: { url: m.image } }] });
-                } else if (m.content) {
-                    msgs.push({ role: m.role, content: m.content });
-                }
-            });
-            if (image && model.includes('vision')) {
-                msgs.push({ role: 'user', content: [{ type: 'text', text: txt || 'Bu rasmni tahlil qil' }, { type: 'image_url', image_url: { url: image } }] });
-            } else {
-                msgs.push({ role: 'user', content: txt });
-            }
-
-            const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${settings.apiKey}` },
-                body: JSON.stringify({
-                    model,
-                    messages: [{ role: 'system', content: "Siz Boris AI - O'zbek tilida gaplashadigan aqlli yordamchi. Markdown ishlating. Kodda izoh qo'shing." }, ...msgs],
-                    temperature: 0.7,
-                    max_tokens: 4096
-                })
-            });
-            if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || 'API xatosi'); }
-            const data = await res.json();
-            return data.choices[0].message.content;
+            
+            let imgHtml = img ? `<img src="${img}" class="msg-img">` : '';
+            
+            chat.innerHTML += `
+                <div class="msg ${cls}">
+                    <div class="msg-avatar">${avatar}</div>
+                    <div class="msg-content">
+                        <div class="msg-name">${name}</div>
+                        <div class="msg-text">${html}</div>
+                        ${imgHtml}
+                    </div>
+                </div>
+            `;
+            chat.scrollTop = chat.scrollHeight;
         }
 
         function showTyping() {
-            const el = document.getElementById('messages');
-            el.innerHTML += `<div class="msg bot" id="typingMsg"><div class="msg-avatar">🤖</div><div class="msg-body"><div class="msg-name">Boris AI</div><div class="typing"><span></span><span></span><span></span></div></div></div>`;
-            scrollDown();
+            const chat = document.getElementById('chat');
+            chat.innerHTML += `
+                <div class="msg bot" id="typing">
+                    <div class="msg-avatar">🤖</div>
+                    <div class="msg-content">
+                        <div class="msg-name">Boris AI</div>
+                        <div class="typing"><span></span><span></span><span></span></div>
+                    </div>
+                </div>
+            `;
+            chat.scrollTop = chat.scrollHeight;
         }
 
-        function hideTyping() { const t = document.getElementById('typingMsg'); if (t) t.remove(); }
-        function playSound() { try { const c = new (window.AudioContext || window.webkitAudioContext)(); const o = c.createOscillator(); const g = c.createGain(); o.connect(g); g.connect(c.destination); o.frequency.value = 800; g.gain.value = 0.1; o.start(); g.gain.exponentialRampToValueAtTime(0.01, c.currentTime + 0.1); o.stop(c.currentTime + 0.1); } catch(e) {} }
-
-        function handleImg(e) { const f = e.target.files[0]; if (f) processImg(f); }
-
-        function processImg(f) {
-            if (!f.type.startsWith('image/')) return toast('Faqat rasm!', 'err');
-            if (f.size > 10 * 1024 * 1024) return toast('10MB dan katta!', 'err');
-            const r = new FileReader();
-            r.onload = e => {
-                img = e.target.result;
-                document.getElementById('previewImg').src = img;
-                document.getElementById('imgPreview').classList.add('show');
-                const m = document.getElementById('modelSelect');
-                if (!m.value.includes('vision')) { m.value = 'llama-3.2-11b-vision-preview'; saveSettings(); toast('Vision tanlandi', 'ok'); }
-            };
-            r.readAsDataURL(f);
+        function hideTyping() {
+            const t = document.getElementById('typing');
+            if (t) t.remove();
         }
 
-        function removeImg() { img = null; document.getElementById('imgPreview').classList.remove('show'); document.getElementById('imgInput').value = ''; }
-        function viewImg(src) { document.getElementById('modalImg').src = src; openModal('imgModal'); }
-
-        function setupDragDrop() {
-            document.addEventListener('dragover', e => { e.preventDefault(); document.getElementById('dropZone').classList.add('show'); });
-            document.addEventListener('dragleave', e => { if (!e.relatedTarget) document.getElementById('dropZone').classList.remove('show'); });
-            document.addEventListener('drop', e => { e.preventDefault(); document.getElementById('dropZone').classList.remove('show'); if (e.dataTransfer.files[0]?.type.startsWith('image/')) processImg(e.dataTransfer.files[0]); });
-        }
-
-        function toggleVoice() {
-            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) return toast('Qo\'llab-quvvatlanmaydi', 'err');
-            recording ? stopRec() : startRec();
-        }
-
-        function startRec() {
-            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SR();
-            recognition.lang = 'uz-UZ';
-            recognition.continuous = false;
-            recognition.interimResults = true;
-            recognition.onresult = e => { document.getElementById('msgInput').value = e.results[0][0].transcript; autoResize(document.getElementById('msgInput')); };
-            recognition.onend = () => stopRec();
-            recognition.start();
-            recording = true;
-            document.getElementById('voiceBtn').classList.add('rec');
-            document.getElementById('voiceBtn').textContent = '⏹️';
-        }
-
-        function stopRec() {
-            if (recognition) recognition.stop();
-            recording = false;
-            document.getElementById('voiceBtn').classList.remove('rec');
-            document.getElementById('voiceBtn').textContent = '🎤';
-        }
-
-        function speak(t) {
-            const u = new SpeechSynthesisUtterance(t.replace(/[#*`_\[\]()]/g, '').slice(0, 400));
-            u.lang = 'uz-UZ';
-            speechSynthesis.speak(u);
-        }
-
-        function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }
-        function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 150) + 'px'; }
-        function setPrompt(t) { document.getElementById('msgInput').value = t; document.getElementById('msgInput').focus(); autoResize(document.getElementById('msgInput')); }
-
-        function setupKeys() {
-            document.addEventListener('keydown', e => {
-                if (e.ctrlKey || e.metaKey) {
-                    if (e.key === 'k') { e.preventDefault(); newChat(); }
-                    if (e.key === 'u') { e.preventDefault(); document.getElementById('imgInput').click(); }
-                    if (e.key === 'm') { e.preventDefault(); toggleVoice(); }
-                }
-                if (e.key === 'Escape') closeAllModals();
-            });
-        }
-
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarBg').classList.toggle('show'); }
-        function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarBg').classList.remove('show'); }
-
-        function openModal(id) { document.getElementById(id).classList.add('show'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('show'); }
-        function closeAllModals() { document.querySelectorAll('.modal-bg').forEach(m => m.classList.remove('show')); }
-        function openSettings() { document.getElementById('settingsApiKey').value = settings.apiKey; openModal('settingsModal'); }
-
-        function exportData() {
-            if (!chats.length) return toast('Bo\'sh', 'err');
-            const blob = new Blob([JSON.stringify({ chats }, null, 2)], { type: 'application/json' });
-            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `boris-backup.json`; a.click();
-            toast('Eksport qilindi', 'ok');
-        }
-
-        function importData(e) {
-            const f = e.target.files[0]; if (!f) return;
-            const r = new FileReader();
-            r.onload = ev => {
-                try {
-                    const d = JSON.parse(ev.target.result);
-                    if (d.chats?.length) {
-                        d.chats.forEach(c => { if (!chats.find(x => x.id === c.id)) chats.push(c); });
-                        localStorage.setItem('borisChats', JSON.stringify(chats));
-                        updateChatList();
-                        toast('Import qilindi', 'ok');
+        async function send() {
+            const input = document.getElementById('msgInput');
+            const text = input.value.trim();
+            const model = document.getElementById('model').value;
+            
+            if (!text && !currentImg) return;
+            
+            addMsg('user', text, currentImg);
+            messages.push({ role: 'user', content: text, image: currentImg });
+            
+            input.value = '';
+            const imgToSend = currentImg;
+            removeImg();
+            
+            showTyping();
+            
+            try {
+                const apiMessages = [];
+                
+                messages.slice(-6).forEach(m => {
+                    if (m.image && model.includes('vision')) {
+                        apiMessages.push({
+                            role: 'user',
+                            content: [
+                                { type: 'text', text: m.content || 'Bu rasmni tahlil qil' },
+                                { type: 'image_url', image_url: { url: m.image } }
+                            ]
+                        });
+                    } else {
+                        apiMessages.push({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content });
                     }
-                } catch(err) { toast('Xatolik', 'err'); }
-            };
-            r.readAsText(f);
-            e.target.value = '';
-        }
-
-  p      function toast(msg, type = 'ok') {
-            const t = document.getElementById('toast');
-            t.textContent = (type === 'ok' ? '✓ ' : '✗ ') + msg;
-            t.className = `toast ${type} show`;
-            setTimeout(() => t.classList.remove('show'), 3000);
+                });
+                
+                const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        messages: [
+                            { role: 'system', content: "Siz Boris AI - O'zbek tilida gaplashadigan aqlli yordamchi. Markdown ishlating." },
+                            ...apiMessages
+                        ],
+                        temperature: 0.7,
+                        max_tokens: 4096
+                    })
+                });
+                
+                hideTyping();
+                
+                if (!res.ok) {
+                    const err = await res.json();
+                    throw new Error(err.error?.message || 'API xatosi');
+                }
+                
+                const data = await res.json();
+                const reply = data.choices[0].message.content;
+                
+                addMsg('bot', reply);
+                messages.push({ role: 'assistant', content: reply });
+                
+            } catch (e) {
+                hideTyping();
+                addMsg('bot', '❌ Xatolik: ' + e.message);
+            }
         }
     </script>
 </body>
