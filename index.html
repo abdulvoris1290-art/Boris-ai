@@ -404,7 +404,7 @@
                 <select class="model-select" id="modelSelect">
                     <option value="llama-3.3-70b-versatile">LLaMA 3.3 70B</option>
                     <option value="llama-3.1-8b-instant">LLaMA 3.1 8B (Tez)</option>
-                    <option value="llama-3.2-11b-vision-preview">LLaMA Vision (Rasm)</option>
+                    <option value="llama-3.2-90b-vision-preview">LLaMA Vision 90B</option>
                     <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
                 </select>
                 <button class="user-btn" onclick="handleUserClick()">
@@ -620,7 +620,7 @@
                 currentImg = ev.target.result;
                 document.getElementById('previewImg').src = currentImg;
                 document.getElementById('imgPreview').classList.add('active');
-                document.getElementById('modelSelect').value = 'llama-3.2-11b-vision-preview';
+                document.getElementById('modelSelect').value = 'llama-3.2-90b-vision-preview';
                 toast('📷 Rasm yuklandi! Vision model tanlandi.');
             };
             reader.readAsDataURL(file);
@@ -676,26 +676,54 @@
         }
 
         async function callAPI(image = null) {
-            const model = document.getElementById('modelSelect').value;
+            let model = document.getElementById('modelSelect').value;
 
             try {
-                const apiMessages = [
-                    { role: 'system', content: "Sen Boris AI - O'zbek tilida gaplashadigan professional AI yordamchi. Emoji ishlat. Kod yozganda ```language formatidan foydalanish." }
-                ];
+                // Agar rasm bor bo'lsa, vision modeliga o'tkazish
+                if (image) {
+                    model = 'llama-3.2-90b-vision-preview';
+                }
 
-                messages.slice(-10).forEach(m => {
-                    if (m.image && model.includes('vision')) {
+                const apiMessages = [];
+
+                // Vision model uchun system message qo'shmaymiz
+                if (!image) {
+                    apiMessages.push({
+                        role: 'system',
+                        content: "Sen Boris AI - O'zbek tilida gaplashadigan professional AI yordamchi. Emoji ishlat. Kod yozganda ```language formatidan foydalanish."
+                    });
+                }
+
+                // Oldingi xabarlarni qo'shish (faqat matnli)
+                messages.slice(-8).forEach(m => {
+                    if (!m.image) {
                         apiMessages.push({
-                            role: 'user',
-                            content: [
-                                { type: 'text', text: m.content },
-                                { type: 'image_url', image_url: { url: m.image } }
-                            ]
+                            role: m.role === 'user' ? 'user' : 'assistant',
+                            content: m.content
                         });
-                    } else {
-                        apiMessages.push({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content });
                     }
                 });
+
+                // Oxirgi xabar (rasm bilan yoki rasmsiz)
+                const lastMsg = messages[messages.length - 1];
+                if (lastMsg && lastMsg.image) {
+                    apiMessages.push({
+                        role: 'user',
+                        content: [
+                            {
+                                type: 'image_url',
+                                image_url: { url: lastMsg.image }
+                            },
+                            {
+                                type: 'text',
+                                text: lastMsg.content || "Bu rasmda nima bor? Batafsil tahlil qil."
+                            }
+                        ]
+                    });
+                }
+
+                console.log('Model:', model);
+                console.log('Messages:', apiMessages);
 
                 const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
                     method: 'POST',
@@ -713,9 +741,10 @@
 
                 if (!res.ok) {
                     const err = await res.json().catch(() => ({}));
+                    console.error('API Error:', err);
                     if (res.status === 401) return '❌ API kalit noto\'g\'ri!';
                     if (res.status === 429) return '⏳ So\'rovlar limiti. Kuting...';
-                    if (res.status === 400 && image) return '❌ Rasm tahlili uchun "LLaMA Vision" modelini tanlang!';
+                    if (res.status === 400) return '❌ Xatolik: ' + (err.error?.message || 'Noto\'g\'ri so\'rov');
                     return '❌ Xatolik: ' + (err.error?.message || res.status);
                 }
 
@@ -723,6 +752,7 @@
                 return data.choices[0].message.content;
 
             } catch (e) {
+                console.error('Error:', e);
                 return '❌ Tarmoq xatosi: ' + e.message;
             }
         }
