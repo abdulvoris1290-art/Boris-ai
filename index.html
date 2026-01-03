@@ -3,170 +3,774 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boris AI</title>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <title>Boris AI Ultra</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: system-ui, sans-serif; background: #0f0f0f; color: #fff; min-height: 100vh; }
-        .container { max-width: 900px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; height: 100vh; }
-        .header { text-align: center; padding: 20px 0; border-bottom: 1px solid #333; }
-        .header h1 { font-size: 2rem; background: linear-gradient(135deg, #6366f1, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .header p { color: #888; margin-top: 8px; }
-        .api-section { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 20px; margin: 20px 0; }
-        .api-section label { display: block; margin-bottom: 8px; color: #aaa; }
-        .api-section input { width: 100%; padding: 12px; background: #252525; border: 1px solid #444; border-radius: 8px; color: #fff; font-size: 1rem; }
-        .api-section input:focus { outline: none; border-color: #6366f1; }
-        .api-section button { width: 100%; padding: 12px; margin-top: 12px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none; border-radius: 8px; color: #fff; font-size: 1rem; font-weight: 600; cursor: pointer; }
-        .api-section a { display: block; text-align: center; margin-top: 12px; color: #6366f1; text-decoration: none; }
-        .model-select { padding: 10px; background: #252525; border: 1px solid #444; border-radius: 8px; color: #fff; margin: 10px 0; }
-        .chat { flex: 1; overflow-y: auto; padding: 20px 0; }
-        .msg { display: flex; gap: 12px; margin-bottom: 16px; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .msg-avatar { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
-        .msg.user .msg-avatar { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
-        .msg.bot .msg-avatar { background: #333; }
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --bg: #0a0f0d;
+            --card: rgba(16, 185, 129, 0.08);
+            --border: rgba(16, 185, 129, 0.2);
+            --text: #fff;
+            --muted: rgba(255,255,255,0.5);
+        }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-icon {
+            width: 44px; height: 44px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .user-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .user-btn:hover { border-color: var(--primary); }
+        .user-avatar {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .model-select {
+            padding: 10px 14px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .api-section {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .api-section h2 { margin-bottom: 16px; font-size: 18px; }
+        .api-row { display: flex; gap: 10px; margin-bottom: 12px; }
+        .api-input {
+            flex: 1;
+            padding: 12px 16px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 14px;
+        }
+        .api-input:focus { outline: none; border-color: var(--primary); }
+        .btn {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn:hover { opacity: 0.9; }
+        .api-link { color: var(--primary); text-decoration: none; font-size: 14px; }
+        .chat {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+        .chat::-webkit-scrollbar { width: 6px; }
+        .chat::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        .msg {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .msg-avatar {
+            width: 40px; height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .msg.user .msg-avatar { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
+        .msg.bot .msg-avatar { background: var(--card); border: 1px solid var(--border); }
         .msg-content { flex: 1; }
-        .msg-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
-        .msg-text { line-height: 1.6; }
-        .msg-text pre { background: #1a1a1a; padding: 12px; border-radius: 8px; overflow-x: auto; margin: 10px 0; }
-        .msg-text code { font-family: monospace; }
-        .msg-text p { margin-bottom: 8px; }
-        .msg-img { max-width: 300px; border-radius: 8px; margin-top: 8px; }
-        .typing span { display: inline-block; width: 8px; height: 8px; background: #6366f1; border-radius: 50%; margin-right: 4px; animation: bounce 1.4s infinite; }
+        .msg-name { font-weight: 600; font-size: 14px; margin-bottom: 6px; color: var(--muted); }
+        .msg-bubble {
+            padding: 14px 18px;
+            border-radius: 16px;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+        .msg.user .msg-bubble {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-bottom-right-radius: 4px;
+        }
+        .msg.bot .msg-bubble {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 4px;
+        }
+        .msg-bubble pre {
+            background: rgba(0,0,0,0.4);
+            padding: 14px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .msg-bubble code { font-family: 'Consolas', monospace; font-size: 13px; }
+        .msg-img {
+            max-width: 300px;
+            border-radius: 12px;
+            margin-top: 10px;
+        }
+        .msg-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .msg-action {
+            padding: 6px 12px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--muted);
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .msg-action:hover { color: var(--text); border-color: var(--primary); }
+        .typing span {
+            display: inline-block;
+            width: 10px; height: 10px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: bounce 1.4s infinite;
+        }
         .typing span:nth-child(2) { animation-delay: 0.2s; }
         .typing span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-8px); } }
-        .input-area { border-top: 1px solid #333; padding-top: 16px; }
-        .img-preview { margin-bottom: 10px; position: relative; display: inline-block; }
-        .img-preview img { max-height: 80px; border-radius: 8px; }
-        .img-preview button { position: absolute; top: -8px; right: -8px; width: 24px; height: 24px; background: #ef4444; border: none; border-radius: 50%; color: #fff; cursor: pointer; }
-        .input-wrap { display: flex; gap: 10px; background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 10px; }
-        .input-wrap:focus-within { border-color: #6366f1; }
-        .input-wrap button { background: none; border: none; color: #888; font-size: 1.3rem; cursor: pointer; padding: 8px; }
-        .input-wrap button:hover { color: #fff; }
-        .input-wrap textarea { flex: 1; background: none; border: none; color: #fff; font-size: 1rem; resize: none; outline: none; font-family: inherit; }
-        .send-btn { background: linear-gradient(135deg, #6366f1, #8b5cf6) !important; color: #fff !important; border-radius: 8px !important; padding: 8px 16px !important; }
+        @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-10px); } }
+        .input-area {
+            border-top: 1px solid var(--border);
+            padding-top: 16px;
+        }
+        .img-preview {
+            display: none;
+            margin-bottom: 12px;
+            position: relative;
+            width: fit-content;
+        }
+        .img-preview.active { display: block; }
+        .img-preview img {
+            max-height: 120px;
+            border-radius: 12px;
+            border: 2px solid var(--primary);
+        }
+        .img-preview button {
+            position: absolute;
+            top: -10px; right: -10px;
+            width: 28px; height: 28px;
+            background: #ef4444;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .input-box {
+            display: flex;
+            gap: 10px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 10px;
+        }
+        .input-box:focus-within { border-color: var(--primary); }
+        .tool-btn {
+            width: 44px; height: 44px;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 20px;
+        }
+        .tool-btn:hover { background: rgba(16,185,129,0.1); color: var(--text); }
+        #msgInput {
+            flex: 1;
+            padding: 12px;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-size: 15px;
+            resize: none;
+            outline: none;
+            font-family: inherit;
+        }
+        .send-btn {
+            width: 48px; height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
+        }
+        .send-btn:disabled { opacity: 0.5; }
         .hidden { display: none !important; }
-        .status { text-align: center; padding: 8px; background: #1a1a1a; border-radius: 8px; margin-bottom: 10px; font-size: 0.9rem; }
-        .status.ok { color: #22c55e; }
-        .status.err { color: #ef4444; }
+        .welcome {
+            text-align: center;
+            padding: 40px 0;
+        }
+        .welcome-icon {
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 20px;
+        }
+        .welcome h1 {
+            font-size: 28px;
+            background: linear-gradient(135deg, var(--primary), #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .welcome p { color: var(--muted); }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 24px;
+        }
+        .card {
+            padding: 16px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            cursor: pointer;
+            text-align: left;
+        }
+        .card:hover { border-color: var(--primary); }
+        .card-icon { font-size: 24px; margin-bottom: 8px; }
+        .card h3 { font-size: 14px; margin-bottom: 4px; }
+        .card p { font-size: 12px; color: var(--muted); }
+        .modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+        }
+        .modal.active { opacity: 1; visibility: visible; }
+        .modal-content {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            max-width: 400px;
+            width: 90%;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .modal-title { font-size: 18px; font-weight: 600; }
+        .modal-close {
+            width: 32px; height: 32px;
+            background: var(--card);
+            border: none;
+            border-radius: 8px;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .google-btn {
+            width: 100%;
+            padding: 14px;
+            background: white;
+            border: none;
+            border-radius: 12px;
+            color: #333;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .google-btn:hover { background: #f5f5f5; }
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            padding: 14px 24px;
+            background: var(--bg);
+            border: 1px solid var(--primary);
+            border-radius: 12px;
+            font-size: 14px;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .toast.error { border-color: #ef4444; }
+        @media (max-width: 600px) {
+            .cards { grid-template-columns: 1fr; }
+            .header { flex-direction: column; gap: 12px; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🤖 Boris AI</h1>
-            <p>Groq + LLaMA asosidagi tezkor AI yordamchi</p>
+            <div class="logo">
+                <div class="logo-icon">🤖</div>
+                <span class="logo-text">Boris AI Ultra</span>
+            </div>
+            <div class="header-right">
+                <select class="model-select" id="modelSelect">
+                    <option value="llama-3.3-70b-versatile">LLaMA 3.3 70B</option>
+                    <option value="llama-3.1-8b-instant">LLaMA 3.1 8B (Tez)</option>
+                    <option value="llama-3.2-11b-vision-preview">LLaMA Vision (Rasm)</option>
+                    <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
+                </select>
+                <button class="user-btn" onclick="handleUserClick()">
+                    <div class="user-avatar" id="userAvatar">👤</div>
+                    <span id="userName">Kirish</span>
+                </button>
+            </div>
         </div>
-        
-        <div class="api-section" id="apiSection">
-            <label>🔑 Groq API kalitini kiriting:</label>
-            <input type="password" id="apiKey" placeholder="gsk_...">
-            <button onclick="saveKey()">Saqlash</button>
-            <a href="https://console.groq.com/keys" target="_blank">👉 Bepul API kalit olish</a>
+
+        <div class="chat" id="chat">
+            <div class="welcome" id="welcome">
+                <div class="welcome-icon">🤖</div>
+                <h1>Assalomu alaykum!</h1>
+                <p>Men Boris AI — Groq + LLaMA asosidagi tezkor AI yordamchiman</p>
+
+                <div class="api-section" id="apiSection">
+                    <h2>🔑 API kalitni kiriting</h2>
+                    <div class="api-row">
+                        <input type="password" class="api-input" id="apiKeyInput" placeholder="gsk_...">
+                        <button class="btn" onclick="saveApiKey()">Saqlash</button>
+                    </div>
+                    <a href="https://console.groq.com/keys" target="_blank" class="api-link">👉 Bepul API kalit olish</a>
+                </div>
+
+                <div class="cards">
+                    <div class="card" onclick="quickSend('Python da web scraper yozib ber')">
+                        <div class="card-icon">💻</div>
+                        <h3>Kod yozish</h3>
+                        <p>Har qanday tilda kod yozaman</p>
+                    </div>
+                    <div class="card" onclick="quickSend('Kvant fizikasini oddiy tilda tushuntir')">
+                        <div class="card-icon">🧠</div>
+                        <h3>Tushuntirish</h3>
+                        <p>Murakkab narsalarni sodda qilaman</p>
+                    </div>
+                    <div class="card" onclick="document.getElementById('imgInput').click()">
+                        <div class="card-icon">📷</div>
+                        <h3>Rasm tahlili</h3>
+                        <p>Rasmni yuklang, tahlil qilaman</p>
+                    </div>
+                    <div class="card" onclick="quickSend('Suniy intellekt haqida esse yoz')">
+                        <div class="card-icon">✍️</div>
+                        <h3>Yozish</h3>
+                        <p>Esse, maqola, hikoya yozaman</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <div class="hidden" id="mainApp">
-            <div class="status ok" id="status">✓ API ulangan</div>
-            <select class="model-select" id="model">
-                <option value="llama-3.3-70b-versatile">🧠 LLaMA 3.3 70B (Umumiy)</option>
-                <option value="llama-3.1-8b-instant">⚡ LLaMA 3.1 8B (Tez)</option>
-                <option value="llama-3.2-11b-vision-preview">👁️ LLaMA Vision (Rasm uchun)</option>
-                <option value="mixtral-8x7b-32768">🔀 Mixtral 8x7B</option>
-            </select>
-            
-            <div class="chat" id="chat"></div>
-            
-            <div class="input-area">
-                <div class="img-preview hidden" id="imgPreview">
-                    <img src="" id="previewImg">
-                    <button onclick="removeImg()">✕</button>
-                </div>
-                <div class="input-wrap">
-                    <button onclick="document.getElementById('imgInput').click()">📷</button>
-                    <input type="file" id="imgInput" accept="image/*" style="display:none" onchange="handleImg(event)">
-                    <textarea id="msgInput" placeholder="Xabar yozing..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}"></textarea>
-                    <button class="send-btn" onclick="send()">➤</button>
-                </div>
+
+        <div class="input-area">
+            <div class="img-preview" id="imgPreview">
+                <img id="previewImg" src="">
+                <button onclick="removeImg()">✕</button>
+            </div>
+            <div class="input-box">
+                <button class="tool-btn" onclick="document.getElementById('imgInput').click()">📷</button>
+                <input type="file" id="imgInput" accept="image/*" style="display:none" onchange="handleImg(event)">
+                <textarea id="msgInput" placeholder="Xabaringizni yozing..." rows="1"></textarea>
+                <button class="send-btn" onclick="send()" id="sendBtn">➤</button>
             </div>
         </div>
     </div>
 
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">👤 Kirish</div>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <button class="google-btn" onclick="signInWithGoogle()">
+                <svg width="20" height="20" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Google bilan kirish
+            </button>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">👤 Profil</div>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div style="text-align:center;margin-bottom:20px;">
+                <div class="user-avatar" id="profileAvatar" style="width:64px;height:64px;font-size:28px;margin:0 auto 10px;">👤</div>
+                <div style="font-size:18px;font-weight:600;" id="profileName">Foydalanuvchi</div>
+                <div style="color:var(--muted);" id="profileEmail">email@example.com</div>
+            </div>
+            <button class="btn" style="width:100%;background:#ef4444;" onclick="signOut()">🚪 Chiqish</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
     <script>
-        let apiKey = localStorage.getItem('groqKey') || '';
+        // ================== FIREBASE CONFIG ==================
+        const firebaseConfig = {
+            apiKey: "AIzaSyD-avEHPjvzcJ_4TvAmwiieiLHYzb3rp9Q",
+            authDomain: "boris-ai-d914c.firebaseapp.com",
+            projectId: "boris-ai-d914c",
+            storageBucket: "boris-ai-d914c.firebasestorage.app",
+            messagingSenderId: "191996415438",
+            appId: "1:191996415438:web:0acbfa7e41173953226f9f"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // ================== STATE ==================
+        let apiKey = localStorage.getItem('groq_api_key') || '';
         let currentImg = null;
         let messages = [];
+        let user = null;
+        let isLoading = false;
 
-        if (apiKey) {
-            document.getElementById('apiSection').classList.add('hidden');
-            document.getElementById('mainApp').classList.remove('hidden');
+        // ================== INIT ==================
+        document.addEventListener('DOMContentLoaded', () => {
+            if (apiKey) document.getElementById('apiSection').classList.add('hidden');
+
+            const input = document.getElementById('msgInput');
+            input.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    send();
+                }
+            });
+
+            auth.onAuthStateChanged(handleAuth);
+        });
+
+        // ================== AUTH ==================
+        function handleAuth(u) {
+            user = u;
+            if (u) {
+                document.getElementById('userName').textContent = u.displayName?.split(' ')[0] || 'Profil';
+                const avatar = document.getElementById('userAvatar');
+                if (u.photoURL) avatar.innerHTML = `<img src="${u.photoURL}">`;
+                else avatar.textContent = (u.displayName || 'U').charAt(0);
+                closeModal();
+                toast(`Xush kelibsiz, ${u.displayName?.split(' ')[0]}!`);
+            } else {
+                document.getElementById('userName').textContent = 'Kirish';
+                document.getElementById('userAvatar').innerHTML = '👤';
+            }
         }
 
-        function saveKey() {
-            const key = document.getElementById('apiKey').value.trim();
-            if (!key) return alert('API kalitni kiriting!');
+        function handleUserClick() {
+            if (user) {
+                document.getElementById('profileName').textContent = user.displayName || 'Foydalanuvchi';
+                document.getElementById('profileEmail').textContent = user.email || '';
+                const avatar = document.getElementById('profileAvatar');
+                if (user.photoURL) avatar.innerHTML = `<img src="${user.photoURL}">`;
+                document.getElementById('profileModal').classList.add('active');
+            } else {
+                document.getElementById('authModal').classList.add('active');
+            }
+        }
+
+        async function signInWithGoogle() {
+            try {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                provider.setCustomParameters({ prompt: 'select_account' });
+                await auth.signInWithPopup(provider);
+            } catch (e) {
+                console.error(e);
+                toast('Xatolik: ' + e.message, true);
+            }
+        }
+
+        async function signOut() {
+            await auth.signOut();
+            closeModal();
+            toast('Tizimdan chiqdingiz');
+        }
+
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+        }
+
+        // ================== API ==================
+        function saveApiKey() {
+            const key = document.getElementById('apiKeyInput').value.trim();
+            if (!key.startsWith('gsk_')) {
+                toast('Kalit gsk_ bilan boshlanishi kerak', true);
+                return;
+            }
             apiKey = key;
-            localStorage.setItem('groqKey', key);
+            localStorage.setItem('groq_api_key', key);
             document.getElementById('apiSection').classList.add('hidden');
-            document.getElementById('mainApp').classList.remove('hidden');
+            toast('API kalit saqlandi!');
         }
 
+        // ================== IMAGE ==================
         function handleImg(e) {
             const file = e.target.files[0];
             if (!file) return;
+            if (file.size > 20 * 1024 * 1024) {
+                toast('Rasm juda katta (max 20MB)', true);
+                return;
+            }
             const reader = new FileReader();
-            reader.onload = ev => {
+            reader.onload = (ev) => {
                 currentImg = ev.target.result;
                 document.getElementById('previewImg').src = currentImg;
-                document.getElementById('imgPreview').classList.remove('hidden');
-                document.getElementById('model').value = 'llama-3.2-11b-vision-preview';
+                document.getElementById('imgPreview').classList.add('active');
+                document.getElementById('modelSelect').value = 'llama-3.2-11b-vision-preview';
+                toast('📷 Rasm yuklandi! Vision model tanlandi.');
             };
             reader.readAsDataURL(file);
+            e.target.value = '';
         }
 
         function removeImg() {
             currentImg = null;
-            document.getElementById('imgPreview').classList.add('hidden');
-            document.getElementById('imgInput').value = '';
+            document.getElementById('imgPreview').classList.remove('active');
+        }
+
+        // ================== MESSAGING ==================
+        async function send() {
+            const input = document.getElementById('msgInput');
+            let text = input.value.trim();
+
+            if (!text && !currentImg) return;
+            if (isLoading) return;
+            if (!apiKey) {
+                toast('Avval API kalitni kiriting!', true);
+                return;
+            }
+
+            if (!text && currentImg) text = 'Bu rasmni tahlil qil';
+
+            input.value = '';
+            input.style.height = 'auto';
+            document.getElementById('welcome').classList.add('hidden');
+
+            addMsg('user', text, currentImg);
+            messages.push({ role: 'user', content: text, image: currentImg });
+
+            const imgToSend = currentImg;
+            removeImg();
+
+            isLoading = true;
+            document.getElementById('sendBtn').disabled = true;
+            showTyping();
+
+            const response = await callAPI(imgToSend);
+
+            hideTyping();
+            isLoading = false;
+            document.getElementById('sendBtn').disabled = false;
+
+            addMsg('bot', response);
+            messages.push({ role: 'assistant', content: response });
+        }
+
+        function quickSend(text) {
+            document.getElementById('msgInput').value = text;
+            send();
+        }
+
+        async function callAPI(image = null) {
+            const model = document.getElementById('modelSelect').value;
+
+            try {
+                const apiMessages = [
+                    { role: 'system', content: "Sen Boris AI - O'zbek tilida gaplashadigan professional AI yordamchi. Emoji ishlat. Kod yozganda ```language formatidan foydalanish." }
+                ];
+
+                messages.slice(-10).forEach(m => {
+                    if (m.image && model.includes('vision')) {
+                        apiMessages.push({
+                            role: 'user',
+                            content: [
+                                { type: 'text', text: m.content },
+                                { type: 'image_url', image_url: { url: m.image } }
+                            ]
+                        });
+                    } else {
+                        apiMessages.push({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content });
+                    }
+                });
+
+                const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        messages: apiMessages,
+                        temperature: 0.7,
+                        max_tokens: 4096
+                    })
+                });
+
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    if (res.status === 401) return '❌ API kalit noto\'g\'ri!';
+                    if (res.status === 429) return '⏳ So\'rovlar limiti. Kuting...';
+                    if (res.status === 400 && image) return '❌ Rasm tahlili uchun "LLaMA Vision" modelini tanlang!';
+                    return '❌ Xatolik: ' + (err.error?.message || res.status);
+                }
+
+                const data = await res.json();
+                return data.choices[0].message.content;
+
+            } catch (e) {
+                return '❌ Tarmoq xatosi: ' + e.message;
+            }
         }
 
         function addMsg(role, content, img = null) {
             const chat = document.getElementById('chat');
+            const div = document.createElement('div');
+            div.className = `msg ${role === 'user' ? 'user' : 'bot'}`;
+
             const avatar = role === 'user' ? '👤' : '🤖';
             const name = role === 'user' ? 'Siz' : 'Boris AI';
-            const cls = role === 'user' ? 'user' : 'bot';
-            
-            let html = content;
-            if (role === 'bot' && typeof marked !== 'undefined') {
-                html = marked.parse(content);
-            }
-            
-            let imgHtml = img ? `<img src="${img}" class="msg-img">` : '';
-            
-            chat.innerHTML += `
-                <div class="msg ${cls}">
-                    <div class="msg-avatar">${avatar}</div>
-                    <div class="msg-content">
-                        <div class="msg-name">${name}</div>
-                        <div class="msg-text">${html}</div>
-                        ${imgHtml}
-                    </div>
+            const formatted = role === 'bot' ? formatMd(content) : escapeHtml(content);
+            const imgHtml = img ? `<img src="${img}" class="msg-img">` : '';
+
+            const actions = role === 'bot' ? `
+                <div class="msg-actions">
+                    <button class="msg-action" onclick="copyText(this)">📋 Nusxa</button>
+                    <button class="msg-action" onclick="speakText('${escapeHtml(content)}')">🔊 O'qish</button>
+                </div>
+            ` : '';
+
+            div.innerHTML = `
+                <div class="msg-avatar">${avatar}</div>
+                <div class="msg-content">
+                    <div class="msg-name">${name}</div>
+                    <div class="msg-bubble" data-content="${escapeHtml(content)}">${formatted}</div>
+                    ${imgHtml}
+                    ${actions}
                 </div>
             `;
+
+            chat.appendChild(div);
             chat.scrollTop = chat.scrollHeight;
         }
 
         function showTyping() {
             const chat = document.getElementById('chat');
-            chat.innerHTML += `
-                <div class="msg bot" id="typing">
-                    <div class="msg-avatar">🤖</div>
-                    <div class="msg-content">
-                        <div class="msg-name">Boris AI</div>
-                        <div class="typing"><span></span><span></span><span></span></div>
-                    </div>
+            const div = document.createElement('div');
+            div.id = 'typing';
+            div.className = 'msg bot';
+            div.innerHTML = `
+                <div class="msg-avatar">🤖</div>
+                <div class="msg-content">
+                    <div class="msg-name">Boris AI</div>
+                    <div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>
                 </div>
             `;
+            chat.appendChild(div);
             chat.scrollTop = chat.scrollHeight;
         }
 
@@ -175,73 +779,40 @@
             if (t) t.remove();
         }
 
-        async function send() {
-            const input = document.getElementById('msgInput');
-            const text = input.value.trim();
-            const model = document.getElementById('model').value;
-            
-            if (!text && !currentImg) return;
-            
-            addMsg('user', text, currentImg);
-            messages.push({ role: 'user', content: text, image: currentImg });
-            
-            input.value = '';
-            const imgToSend = currentImg;
-            removeImg();
-            
-            showTyping();
-            
-            try {
-                const apiMessages = [];
-                
-                messages.slice(-6).forEach(m => {
-                    if (m.image && model.includes('vision')) {
-                        apiMessages.push({
-                            role: 'user',
-                            content: [
-                                { type: 'text', text: m.content || 'Bu rasmni tahlil qil' },
-                                { type: 'image_url', image_url: { url: m.image } }
-                            ]
-                        });
-                    } else {
-                        apiMessages.push({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content });
-                    }
-                });
-                
-                const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${apiKey}`
-                    },
-                    body: JSON.stringify({
-                        model: model,
-                        messages: [
-                            { role: 'system', content: "Siz Boris AI - O'zbek tilida gaplashadigan aqlli yordamchi. Markdown ishlating." },
-                            ...apiMessages
-                        ],
-                        temperature: 0.7,
-                        max_tokens: 4096
-                    })
-                });
-                
-                hideTyping();
-                
-                if (!res.ok) {
-                    const err = await res.json();
-                    throw new Error(err.error?.message || 'API xatosi');
-                }
-                
-                const data = await res.json();
-                const reply = data.choices[0].message.content;
-                
-                addMsg('bot', reply);
-                messages.push({ role: 'assistant', content: reply });
-                
-            } catch (e) {
-                hideTyping();
-                addMsg('bot', '❌ Xatolik: ' + e.message);
-            }
+        // ================== UTILS ==================
+        function formatMd(text) {
+            text = text.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+            text = text.replace(/`([^`]+)`/g, '<code style="background:rgba(16,185,129,0.2);padding:2px 6px;border-radius:4px;">$1</code>');
+            text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+            text = text.replace(/\n/g, '<br>');
+            return text;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function copyText(btn) {
+            const content = btn.closest('.msg-content').querySelector('.msg-bubble').dataset.content;
+            navigator.clipboard.writeText(content).then(() => toast('Nusxalandi!'));
+        }
+
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) return;
+            speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'uz-UZ';
+            speechSynthesis.speak(u);
+        }
+
+        function toast(msg, isError = false) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = `toast show${isError ? ' error' : ''}`;
+            setTimeout(() => t.classList.remove('show'), 3000);
         }
     </script>
 </body>
