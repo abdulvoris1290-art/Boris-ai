@@ -987,13 +987,13 @@
 
                 // If image, use vision model
                 if (image) {
-                    model = 'llama-3.2-90b-vision-preview';
+                    model = 'llama-3.2-11b-vision-preview';
 
                     apiMessages.push({
                         role: 'user',
                         content: [
-                            { type: 'image_url', image_url: { url: image } },
-                            { type: 'text', text: text }
+                            { type: 'text', text: text },
+                            { type: 'image_url', image_url: { url: image } }
                         ]
                     });
                 } else {
