@@ -16,23 +16,24 @@
         }
 
         :root {
-            --bg-main: #0a0a0a;
-            --bg-sidebar: #111111;
-            --bg-card: #1a1a1a;
-            --bg-input: #1e1e1e;
-            --bg-hover: #252525;
-            --border-color: #2a2a2a;
-            --text-primary: #ffffff;
-            --text-secondary: #9ca3af;
-            --text-muted: #6b7280;
-            --accent: #10b981;
-            --accent-hover: #059669;
-            --accent-glow: rgba(16, 185, 129, 0.15);
-            --purple: #8b5cf6;
+            --bg-main: #09090b;
+            --bg-sidebar: #0f0f12;
+            --bg-card: #18181b;
+            --bg-input: #1c1c20;
+            --bg-hover: #27272a;
+            --border-color: #27272a;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent: #22c55e;
+            --accent-hover: #16a34a;
+            --accent-glow: rgba(34, 197, 94, 0.2);
+            --purple: #a855f7;
             --blue: #3b82f6;
             --pink: #ec4899;
             --orange: #f97316;
             --red: #ef4444;
+            --cyan: #06b6d4;
         }
 
         html, body {
@@ -69,7 +70,7 @@
         .new-chat-btn {
             width: 100%;
             padding: 14px 20px;
-            background: linear-gradient(135deg, var(--accent) 0%, #059669 100%);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--cyan) 100%);
             border: none;
             border-radius: 14px;
             color: white;
@@ -81,12 +82,29 @@
             justify-content: center;
             gap: 10px;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .new-chat-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .new-chat-btn:hover::before {
+            left: 100%;
         }
 
         .new-chat-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 8px 30px rgba(34, 197, 94, 0.4);
         }
 
         .new-chat-btn svg {
@@ -288,13 +306,19 @@
         .brand-logo {
             width: 44px;
             height: 44px;
-            background: linear-gradient(135deg, var(--accent), #059669);
+            background: linear-gradient(135deg, var(--accent), var(--cyan));
             border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .brand-text {
@@ -384,22 +408,39 @@
         }
 
         .welcome-logo {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, var(--accent), #059669);
-            border-radius: 28px;
+            width: 110px;
+            height: 110px;
+            background: linear-gradient(135deg, var(--accent), var(--cyan), var(--purple));
+            border-radius: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 52px;
+            font-size: 56px;
             margin: 0 auto 28px;
-            box-shadow: 0 20px 50px rgba(16, 185, 129, 0.35);
-            animation: float 3s ease-in-out infinite;
+            box-shadow: 0 20px 60px rgba(34, 197, 94, 0.4), 0 0 100px rgba(34, 197, 94, 0.2);
+            animation: float 3s ease-in-out infinite, glow 2s ease-in-out infinite alternate;
+            position: relative;
+        }
+
+        .welcome-logo::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            background: linear-gradient(135deg, var(--accent), var(--cyan), var(--purple));
+            border-radius: 34px;
+            z-index: -1;
+            opacity: 0.5;
+            filter: blur(15px);
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(2deg); }
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 20px 60px rgba(34, 197, 94, 0.4), 0 0 100px rgba(34, 197, 94, 0.2); }
+            100% { box-shadow: 0 25px 70px rgba(6, 182, 212, 0.5), 0 0 120px rgba(168, 85, 247, 0.3); }
         }
 
         .welcome-title {
@@ -847,7 +888,7 @@
         .send-btn {
             width: 48px;
             height: 48px;
-            background: linear-gradient(135deg, var(--accent), #059669);
+            background: linear-gradient(135deg, var(--accent), var(--cyan));
             border: none;
             border-radius: 14px;
             color: white;
@@ -858,12 +899,28 @@
             font-size: 22px;
             transition: all 0.3s;
             flex-shrink: 0;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .send-btn::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--cyan), var(--purple));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .send-btn:hover::after {
+            opacity: 1;
         }
 
         .send-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 25px rgba(16, 185, 129, 0.4);
+            transform: scale(1.08);
+            box-shadow: 0 8px 30px rgba(6, 182, 212, 0.5);
         }
 
         .send-btn:disabled {
@@ -1146,14 +1203,18 @@
                 </div>
                 <div class="header-right">
                     <select class="model-selector" id="modelSelect">
-                        <optgroup label="Groq (Matn)">
+                        <optgroup label="💬 Matn (Groq)">
                             <option value="groq:llama-3.3-70b-versatile">LLaMA 3.3 70B</option>
                             <option value="groq:llama-3.1-8b-instant">LLaMA 3.1 8B (Tez)</option>
                             <option value="groq:mixtral-8x7b-32768">Mixtral 8x7B</option>
                         </optgroup>
-                        <optgroup label="Rasm tahlili (Together AI)">
+                        <optgroup label="📷 Rasm tahlili">
                             <option value="together-vision:meta-llama/Llama-Vision-Free">LLaMA Vision (Bepul)</option>
                             <option value="together-vision:meta-llama/Llama-3.2-11B-Vision-Instruct-Turbo">LLaMA 3.2 Vision 11B</option>
+                        </optgroup>
+                        <optgroup label="🎨 Rasm yaratish (Bepul)">
+                            <option value="pollinations:flux">FLUX (Eng yaxshi)</option>
+                            <option value="pollinations:turbo">Turbo (Tez)</option>
                         </optgroup>
                     </select>
                     <button class="header-btn" onclick="exportChat()" title="Eksport">📥</button>
@@ -1212,10 +1273,10 @@
                             <div class="feature-title">Kod yozish</div>
                             <div class="feature-desc">Har qanday tilda dastur</div>
                         </div>
-                        <div class="feature-card" onclick="quickAsk('Kvant fizikasini 10 yoshli bolaga tushunarli qilib tushuntir')">
-                            <span class="feature-icon">🧠</span>
-                            <div class="feature-title">Tushuntirish</div>
-                            <div class="feature-desc">Murakkab narsalarni sodda</div>
+                        <div class="feature-card" onclick="startImageGeneration()">
+                            <span class="feature-icon">🎨</span>
+                            <div class="feature-title">Rasm yaratish</div>
+                            <div class="feature-desc">AI bilan rasm chizish</div>
                         </div>
                         <div class="feature-card" onclick="document.getElementById('fileInput').click()">
                             <span class="feature-icon">📷</span>
@@ -1243,6 +1304,7 @@
                     <div class="input-box">
                         <div class="input-tools">
                             <button class="tool-btn" onclick="document.getElementById('fileInput').click()" title="Rasm yuklash">📷</button>
+                            <button class="tool-btn" onclick="startImageGeneration()" title="Rasm yaratish" id="generateBtn">🎨</button>
                             <button class="tool-btn" onclick="startVoiceInput()" title="Ovozli kiritish" id="voiceBtn">🎤</button>
                         </div>
                         <textarea
@@ -1550,6 +1612,7 @@
                 showToast('Rasm tahlili uchun Together Vision modelini tanlang!', 'error');
                 return;
             }
+            // Pollinations rasm yaratish uchun API key kerak emas!
 
             // Create new chat if needed
             if (!currentChatId) {
@@ -1584,7 +1647,9 @@
 
             // Call appropriate API
             let response;
-            if (provider === 'together-vision') {
+            if (provider === 'pollinations') {
+                response = await generateImageWithPollinations(text, model);
+            } else if (provider === 'together-vision') {
                 response = await callTogetherVisionAPI(text, imageToSend, model);
             } else {
                 response = await callGroqAPI(text, model);
@@ -1652,6 +1717,51 @@ Qoidalar:
             } catch (error) {
                 console.error('Groq API Error:', error);
                 return '❌ Tarmoq xatosi: ' + error.message;
+            }
+        }
+
+        // ==================== IMAGE GENERATION (POLLINATIONS - 100% BEPUL) ====================
+        function startImageGeneration() {
+            const modelSelect = document.getElementById('modelSelect');
+            modelSelect.value = 'pollinations:flux';
+            document.getElementById('messageInput').placeholder = "Qanday rasm yaratmoqchisiz? Masalan: Tog'lar orasida chiroyli uy...";
+            document.getElementById('messageInput').focus();
+            showToast('Rasm yaratish rejimi - tavsif yozing!', 'success');
+        }
+
+        async function generateImageWithPollinations(prompt, model) {
+            try {
+                // Pollinations API - 100% bepul, API key kerak emas!
+                const seed = Math.floor(Math.random() * 1000000);
+                const width = 1024;
+                const height = 1024;
+                const modelName = model === 'turbo' ? 'turbo' : 'flux';
+
+                // URL encode the prompt
+                const encodedPrompt = encodeURIComponent(prompt);
+                const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=${width}&height=${height}&seed=${seed}&model=${modelName}&nologo=true`;
+
+                // Pre-load image to check if it works
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+
+                return new Promise((resolve) => {
+                    img.onload = () => {
+                        resolve(`🎨 **Rasm yaratildi!**\n\nTavsif: "${prompt}"\n\n![Generated Image](${imageUrl})\n\n[📥 Rasmni yuklab olish](${imageUrl})`);
+                    };
+                    img.onerror = () => {
+                        resolve('❌ Rasm yaratishda xatolik. Qayta urinib ko\'ring.');
+                    };
+                    img.src = imageUrl;
+
+                    // Timeout after 30 seconds
+                    setTimeout(() => {
+                        resolve(`🎨 **Rasm yaratilmoqda...**\n\nTavsif: "${prompt}"\n\n![Generated Image](${imageUrl})\n\n[📥 Rasmni yuklab olish](${imageUrl})`);
+                    }, 2000);
+                });
+            } catch (error) {
+                console.error('Pollinations Error:', error);
+                return '❌ Rasm yaratishda xatolik: ' + error.message;
             }
         }
 
@@ -1983,6 +2093,10 @@ Qoidalar:
 
         // ==================== UTILITIES ====================
         function formatMarkdown(text) {
+            // Images - handle markdown images
+            text = text.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="generated-image" style="max-width:100%;border-radius:16px;margin:12px 0;border:1px solid var(--border-color);">');
+            // Links
+            text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" style="color:var(--accent);text-decoration:none;">$1</a>');
             text = text.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
             text = text.replace(/`([^`]+)`/g, '<code style="background:var(--bg-hover);padding:3px 8px;border-radius:4px;font-size:13px;">$1</code>');
             text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
